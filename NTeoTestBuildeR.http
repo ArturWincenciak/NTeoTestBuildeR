@@ -1,0 +1,6 @@
+@NTeoTestBuildeR_HostAddress = http://localhost:5091
+
+GET {{NTeoTestBuildeR_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

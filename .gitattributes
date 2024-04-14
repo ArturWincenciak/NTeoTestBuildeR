@@ -1,0 +1,29 @@
+* text=auto
+
+*.cs        text diff=csharp
+*.cs        text eol=lf
+*.sh    	text eol=lf
+*.env    	text eol=lf
+*.sql    	text eol=lf
+**/Dockerfile   text eol=lf
+**/Cert/*       -text
+*.yml   	text eol=lf
+
+*.jpg   binary
+*.png   binary
+*.gif   binary
+
+*.doc   diff=astextplain
+*.DOC   diff=astextplain
+*.docx  diff=astextplain
+*.DOCX  diff=astextplain
+*.dot   diff=astextplain
+*.DOT   diff=astextplain
+*.pdf   diff=astextplain
+*.PDF   diff=astextplain
+*.rtf   diff=astextplain
+*.RTF   diff=astextplain
+
+*.verified.txt text eol=lf
+*.verified.xml text eol=lf
+*.verified.json text eol=lf

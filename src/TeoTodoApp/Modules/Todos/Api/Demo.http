@@ -1,0 +1,35 @@
+@api = http://localhost:5091
+
+### Create a new todo
+POST {{api}}/Todos
+Content-Type: application/json
+
+{
+  "title": "Define theory of everything",
+  "tags": [
+    "astronomy", "physics", "theoretical"
+  ]
+}
+
+### Id
+@id = 9961c732-3a57-4cc4-85f4-8b3d397360ca
+
+### Get todo by id
+GET {{api}}/Todos/{{id}}
+Content-Type: application/json
+
+### Update todo
+PUT {{api}}/Todos/{{id}}
+Content-Type: application/json
+
+{
+  "title": "Flight to Alpha Centauri",
+  "tags": [
+    "astronomy", "practical"
+  ],
+  "done": true
+}
+
+### Filter todos by tags
+GET {{api}}/Todos?Tags=astronomy&Tags=practical
+Content-Type: application/json

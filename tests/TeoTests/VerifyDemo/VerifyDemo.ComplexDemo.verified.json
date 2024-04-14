@@ -1,0 +1,20 @@
+﻿[
+  {
+    "Id": "Guid_1",
+    "ExternalId": "Guid_2",
+    "Name": "Knuth",
+    "Amount": 1,
+    "CreatedAt": "DateTime_1",
+    "Timestamp": "DateTime_2",
+    "IsDeleted": false
+  },
+  {
+    "Id": "Guid_3",
+    "ExternalId": "Guid_2",
+    "Name": "Conway",
+    "Amount": 2,
+    "CreatedAt": "DateTime_1",
+    "Timestamp": "DateTime_3",
+    "IsDeleted": false
+  }
+]

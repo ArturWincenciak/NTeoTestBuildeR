@@ -1,0 +1,11 @@
+﻿{
+  "Id": "Guid_1",
+  "Name": "Book",
+  "Amount": 64,
+  "Attribute": {
+    "Title": "Surreal Numbers",
+    "Author": "Donald Ervin Knuth",
+    "CreatedAt": "DateTime_1"
+  },
+  "EBook": true
+}

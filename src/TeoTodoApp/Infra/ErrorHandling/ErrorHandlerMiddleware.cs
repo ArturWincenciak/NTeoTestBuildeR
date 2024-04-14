@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using NTeoTestBuildeR.Infra.ErrorHandling.Exceptions;
 
 namespace NTeoTestBuildeR.Infra.ErrorHandling;
 

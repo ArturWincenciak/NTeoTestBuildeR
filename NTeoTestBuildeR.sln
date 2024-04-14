@@ -21,8 +21,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cleanup-code", "cleanup-cod
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".config", ".config", "{877B6679-2CD9-41C2-9F08-2C5A9CE1CA1B}"
 	ProjectSection(SolutionItems) = preProject
-	    .config\dotnet-tools.json = .config\dotnet-tools.json
+					.config\dotnet-tools.json = .config\dotnet-tools.json
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A95DDA69-605E-4423-943C-C17A0EB20B02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeoTests", "tests\TeoTests\TeoTests.csproj", "{EB6EE593-0916-41BF-870B-564A17A8C2A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,10 +38,15 @@ Global
 		{7CDC14B4-2002-4D4C-97BB-89A34B7682B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CDC14B4-2002-4D4C-97BB-89A34B7682B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CDC14B4-2002-4D4C-97BB-89A34B7682B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB6EE593-0916-41BF-870B-564A17A8C2A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB6EE593-0916-41BF-870B-564A17A8C2A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB6EE593-0916-41BF-870B-564A17A8C2A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB6EE593-0916-41BF-870B-564A17A8C2A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7CDC14B4-2002-4D4C-97BB-89A34B7682B6} = {E8B0482E-92A8-440A-9BBD-7711D6B9AF99}
 		{02936694-50E2-40F3-BAB9-A2278BFA2162} = {B6003DD5-A41F-43CF-BCF8-8D504422F423}
 		{877B6679-2CD9-41C2-9F08-2C5A9CE1CA1B} = {8EDEA64C-B440-43E2-9D9D-315B1D6CED21}
+		{EB6EE593-0916-41BF-870B-564A17A8C2A1} = {A95DDA69-605E-4423-943C-C17A0EB20B02}
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,3 @@
-using System.Net;
 using System.Net.Http.Json;
 using NTeoTestBuildeR.Modules.Todos.Api;
 using TeoTests.Modules.TodosModule.Builder;
@@ -21,15 +20,13 @@ public class TodosHappyPathTests
             .Build();
 
         // assert
-        var creatHttpResponse = actual.First();
-        Assert.Equal(HttpStatusCode.Created, creatHttpResponse.StatusCode);
-        var createdPayloadResponse = await creatHttpResponse.Content.ReadFromJsonAsync<CreateTodo.Response>();
-        Assert.True(createdPayloadResponse!.Id != Guid.Empty);
+        await Verify(actual);
 
-        var getActual = actual.Last();
-        Assert.Equal(HttpStatusCode.OK, getActual.StatusCode);
-        var getPayloadResponse = await getActual.Content.ReadFromJsonAsync<GetTodo.Response>();
-        Assert.Equal(title, getPayloadResponse!.Title);
-        Assert.Equivalent(tag, actual: getPayloadResponse.Tags.Single());
+        // *** or like that ***
+        // var creatHttpResponse = actual.First();
+        // var createdPayloadResponse = await creatHttpResponse.Content.ReadFromJsonAsync<CreateTodo.Response>();
+        // var getActual = actual.Last();
+        // var getPayloadResponse = await getActual.Content.ReadFromJsonAsync<GetTodo.Response>();
+        // await Verify(new {createdPayloadResponse, getPayloadResponse});
     }
 }

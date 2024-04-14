@@ -1,0 +1,72 @@
+﻿[
+  {
+    "Version": "1.1",
+    "Content": {
+      "Headers": [
+        {
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ]
+        }
+      ]
+    },
+    "StatusCode": "Created",
+    "ReasonPhrase": "Created",
+    "Headers": [
+      {
+        "Location": [
+          "/Todos/Guid_1"
+        ]
+      }
+    ],
+    "TrailingHeaders": [],
+    "RequestMessage": {
+      "Version": "1.1",
+      "Content": {
+        "Headers": [
+          {
+            "Content-Type": [
+              "application/json; charset=utf-8"
+            ]
+          },
+          {
+            "Content-Length": [
+              "60"
+            ]
+          }
+        ]
+      },
+      "Method": {
+        "Method": "POST"
+      },
+      "RequestUri": "http://localhost/todos",
+      "Headers": []
+    },
+    "IsSuccessStatusCode": true
+  },
+  {
+    "Version": "1.1",
+    "Content": {
+      "Headers": [
+        {
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ]
+        }
+      ]
+    },
+    "StatusCode": "OK",
+    "ReasonPhrase": "OK",
+    "Headers": [],
+    "TrailingHeaders": [],
+    "RequestMessage": {
+      "Version": "1.1",
+      "Method": {
+        "Method": "GET"
+      },
+      "RequestUri": "http://localhost/Todos/4f5d6eb1-ffc0-41eb-aa18-74b9bb159795",
+      "Headers": []
+    },
+    "IsSuccessStatusCode": true
+  }
+]

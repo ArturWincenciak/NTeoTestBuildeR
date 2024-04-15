@@ -1,0 +1,95 @@
+﻿[
+  {
+    "Description": "Set up a to-do",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/todos",
+      "Payload": {
+        "Title": "Calculate the speed of light Guid_1",
+        "Tags": [
+          "physics"
+        ]
+      }
+    },
+    "Response": {
+      "StatusCode": "Created",
+      "Headers": {
+        "Location": [
+          "/Todos/Guid_2"
+        ]
+      },
+      "Payload": {
+        "Id": "Guid_2"
+      }
+    }
+  },
+  {
+    "Description": "Retrieve already created to-do item",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/Todos/Guid_2"
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "Title": "Calculate the speed of light Guid_1",
+        "Tags": [
+          "physics"
+        ],
+        "Done": false
+      }
+    }
+  },
+  {
+    "Description": "Mark the to-do as done",
+    "Request": {
+      "Method": {
+        "Method": "PUT"
+      },
+      "Path": "http://localhost/Todos/Guid_2",
+      "Payload": {
+        "Title": "Calculate the speed of light Guid_1",
+        "Tags": [
+          "physics"
+        ],
+        "Done": true
+      }
+    },
+    "Response": {
+      "StatusCode": "NoContent"
+    }
+  },
+  {
+    "Description": "Try to change the title",
+    "Request": {
+      "Method": {
+        "Method": "PUT"
+      },
+      "Path": "http://localhost/Todos/Guid_2",
+      "Payload": {
+        "Title": "Define theory of everything Guid_1",
+        "Tags": [
+          "physics"
+        ],
+        "Done": true
+      }
+    },
+    "Response": {
+      "StatusCode": "BadRequest",
+      "Payload": {
+        "type": "https://github.com/ArturWincenciak/teo-test-builder/doc/problem-details/todo-already-done.md",
+        "status": 400,
+        "title": "Invalid operation",
+        "detail": "Cannot update a todo that is already done",
+        "instance": "",
+        "extensions": {
+          "traceId": "{Scrubbed}"
+        }
+      }
+    }
+  }
+]

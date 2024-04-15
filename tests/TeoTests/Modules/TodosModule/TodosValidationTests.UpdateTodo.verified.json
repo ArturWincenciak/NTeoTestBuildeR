@@ -1,0 +1,161 @@
+﻿[
+  {
+    "Description": "Create valid to-do for updating test cases",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/todos",
+      "Payload": {
+        "Title": "Go to the moon Guid_1",
+        "Tags": [
+          "astronomy"
+        ]
+      }
+    },
+    "Response": {
+      "StatusCode": "Created",
+      "Headers": {
+        "Location": [
+          "/Todos/Guid_2"
+        ]
+      },
+      "Payload": {
+        "Id": "Guid_2"
+      }
+    }
+  },
+  {
+    "Description": "Should not update with empty title",
+    "Request": {
+      "Method": {
+        "Method": "PUT"
+      },
+      "Path": "http://localhost/Todos/Guid_2",
+      "Payload": {
+        "Title": "",
+        "Tags": [
+          "astronomy"
+        ],
+        "Done": false
+      }
+    },
+    "Response": {
+      "StatusCode": "BadRequest",
+      "Payload": {
+        "type": "https://github.com/ArturWincenciak/teo-test-builder/doc/problem-details/invalid-todo-app-argument.md",
+        "status": 400,
+        "title": "Request payload is not valid",
+        "detail": "Invalid argument for updating existing todo",
+        "instance": "",
+        "errors": {
+          "Title": [
+            "Title is required, cannot be empty or white spaces"
+          ]
+        },
+        "extensions": {
+          "traceId": "{Scrubbed}"
+        }
+      }
+    }
+  },
+  {
+    "Description": "Should not update with whitespace title",
+    "Request": {
+      "Method": {
+        "Method": "PUT"
+      },
+      "Path": "http://localhost/Todos/Guid_2",
+      "Payload": {
+        "Title": "    ",
+        "Tags": [
+          "astronomy"
+        ],
+        "Done": false
+      }
+    },
+    "Response": {
+      "StatusCode": "BadRequest",
+      "Payload": {
+        "type": "https://github.com/ArturWincenciak/teo-test-builder/doc/problem-details/invalid-todo-app-argument.md",
+        "status": 400,
+        "title": "Request payload is not valid",
+        "detail": "Invalid argument for updating existing todo",
+        "instance": "",
+        "errors": {
+          "Title": [
+            "Title is required, cannot be empty or white spaces"
+          ]
+        },
+        "extensions": {
+          "traceId": "{Scrubbed}"
+        }
+      }
+    }
+  },
+  {
+    "Description": "Should not update with empty tags",
+    "Request": {
+      "Method": {
+        "Method": "PUT"
+      },
+      "Path": "http://localhost/Todos/Guid_2",
+      "Payload": {
+        "Title": "Go to the moon Guid_1",
+        "Done": false
+      }
+    },
+    "Response": {
+      "StatusCode": "BadRequest",
+      "Payload": {
+        "type": "https://github.com/ArturWincenciak/teo-test-builder/doc/problem-details/invalid-todo-app-argument.md",
+        "status": 400,
+        "title": "Request payload is not valid",
+        "detail": "Invalid argument for updating existing todo",
+        "instance": "",
+        "errors": {
+          "Tags": [
+            "At least one tag is required"
+          ]
+        },
+        "extensions": {
+          "traceId": "{Scrubbed}"
+        }
+      }
+    }
+  },
+  {
+    "Description": "Should not update with whitespace tag",
+    "Request": {
+      "Method": {
+        "Method": "PUT"
+      },
+      "Path": "http://localhost/Todos/Guid_2",
+      "Payload": {
+        "Title": "Go to the moon Guid_1",
+        "Tags": [
+          "tag with space"
+        ],
+        "Done": false
+      }
+    },
+    "Response": {
+      "StatusCode": "BadRequest",
+      "Payload": {
+        "type": "https://github.com/ArturWincenciak/teo-test-builder/doc/problem-details/invalid-todo-app-argument.md",
+        "status": 400,
+        "title": "Request payload is not valid",
+        "detail": "Invalid argument for updating existing todo",
+        "instance": "",
+        "errors": {
+          "Tags": [
+            "Tags cannot be empty or contain spaces"
+          ]
+        },
+        "extensions": {
+          "traceId": "{Scrubbed}"
+        }
+      }
+    }
+  }
+]

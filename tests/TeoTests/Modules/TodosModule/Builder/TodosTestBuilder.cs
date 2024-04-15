@@ -17,12 +17,21 @@ internal sealed class TodosTestBuilder : TestBuilder
             var httpRequest = new HttpRequestMessage(HttpMethod.Post, requestUri: "/todos");
             httpRequest.Content = JsonContent.Create(requestPayload);
             var httpResponse = await httpClient.SendAsync(httpRequest);
-            var responsePayload = await httpResponse.Content.ReadFromJsonAsync<CreateTodo.Response>();
-            _state.Upsert(id: responsePayload!.Id.ToString(), title: title!, tags: tags!, done: false);
 
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                var responsePayload = await httpResponse.Content.ReadFromJsonAsync<CreateTodo.Response>();
+                _state.Upsert(id: responsePayload!.Id.ToString(), title: title!, tags: tags!, done: false);
+
+                return new Actual(description,
+                    Request: Request.Create(httpRequest, requestPayload),
+                    Response: Response.Create(httpResponse, responsePayload));
+            }
+
+            var error = await httpResponse.Deserialize();
             return new Actual(description,
                 Request: Request.Create(httpRequest, requestPayload),
-                Response: Response.Create(httpResponse, responsePayload));
+                Response: Response.Create(httpResponse, error));
         });
         return this;
     }
@@ -34,12 +43,21 @@ internal sealed class TodosTestBuilder : TestBuilder
             var testCase = _state.SelectByTitle(whichTitle);
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, requestUri: $"/Todos/{testCase.Id}");
             var httpResponse = await httpClient.SendAsync(httpRequest);
-            var responsePayload = await httpResponse.Content.ReadFromJsonAsync<GetTodo.Response>();
-            _state.Upsert(id: testCase.Id!, responsePayload!.Title, responsePayload.Tags, responsePayload.Done);
 
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                var responsePayload = await httpResponse.Content.ReadFromJsonAsync<GetTodo.Response>();
+                _state.Upsert(id: testCase.Id!, responsePayload!.Title, responsePayload.Tags, responsePayload.Done);
+
+                return new Actual(description,
+                    Request: Request.Create(httpRequest),
+                    Response: Response.Create(httpResponse, responsePayload));
+            }
+
+            var error = await httpResponse.Deserialize();
             return new Actual(description,
                 Request: Request.Create(httpRequest),
-                Response: Response.Create(httpResponse, responsePayload));
+                Response: Response.Create(httpResponse, error));
         });
         return this;
     }
@@ -53,11 +71,20 @@ internal sealed class TodosTestBuilder : TestBuilder
             var requestPayload = new UpdateTodo.Request(Title: testCase.Title!, Tags: testCase.Tags!, Done: true);
             httpRequest.Content = JsonContent.Create(requestPayload);
             var httpResponse = await httpClient.SendAsync(httpRequest);
-            _state.Upsert(id: testCase.Id!, title: testCase.Title!, tags: testCase.Tags!, done: true);
 
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                _state.Upsert(id: testCase.Id!, title: testCase.Title!, tags: testCase.Tags!, done: true);
+
+                return new Actual(description,
+                    Request: Request.Create(httpRequest, requestPayload),
+                    Response: Response.Create(httpResponse));
+            }
+
+            var error = await httpResponse.Deserialize();
             return new Actual(description,
                 Request: Request.Create(httpRequest, requestPayload),
-                Response: Response.Create(httpResponse));
+                Response: Response.Create(httpResponse, error));
         });
         return this;
     }
@@ -71,11 +98,20 @@ internal sealed class TodosTestBuilder : TestBuilder
             var requestPayload = new UpdateTodo.Request(Title: newTitle!, Tags: testCase.Tags!, testCase.Done!.Value);
             httpRequest.Content = JsonContent.Create(requestPayload);
             var httpResponse = await httpClient.SendAsync(httpRequest);
-            _state.Upsert(id: testCase.Id!, title: newTitle!, tags: testCase.Tags!, testCase.Done!.Value);
 
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                _state.Upsert(id: testCase.Id!, title: newTitle!, tags: testCase.Tags!, testCase.Done!.Value);
+
+                return new Actual(description,
+                    Request: Request.Create(httpRequest, requestPayload),
+                    Response: Response.Create(httpResponse));
+            }
+
+            var error = await httpResponse.Deserialize();
             return new Actual(description,
                 Request: Request.Create(httpRequest, requestPayload),
-                Response: Response.Create(httpResponse));
+                Response: Response.Create(httpResponse, error));
         });
         return this;
     }
@@ -89,11 +125,20 @@ internal sealed class TodosTestBuilder : TestBuilder
             var requestPayload = new UpdateTodo.Request(Title: testCase.Title!, Tags: newTags!, testCase.Done!.Value);
             httpRequest.Content = JsonContent.Create(requestPayload);
             var httpResponse = await httpClient.SendAsync(httpRequest);
-            _state.Upsert(id: testCase.Id!, title: testCase.Title!, tags: newTags!, testCase.Done!.Value);
 
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                _state.Upsert(id: testCase.Id!, title: testCase.Title!, tags: newTags!, testCase.Done!.Value);
+
+                return new Actual(description,
+                    Request: Request.Create(httpRequest, requestPayload),
+                    Response: Response.Create(httpResponse));
+            }
+
+            var error = await httpResponse.Deserialize();
             return new Actual(description,
                 Request: Request.Create(httpRequest, requestPayload),
-                Response: Response.Create(httpResponse));
+                Response: Response.Create(httpResponse, error));
         });
         return this;
     }

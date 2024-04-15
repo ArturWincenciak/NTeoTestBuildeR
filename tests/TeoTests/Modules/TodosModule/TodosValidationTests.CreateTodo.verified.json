@@ -1,0 +1,131 @@
+﻿[
+  {
+    "Description": "Should not create with whitespace title",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/todos",
+      "Payload": {
+        "Title": "    ",
+        "Tags": [
+          "tag"
+        ]
+      }
+    },
+    "Response": {
+      "StatusCode": "BadRequest",
+      "Payload": {
+        "type": "https://github.com/ArturWincenciak/teo-test-builder/doc/problem-details/invalid-todo-app-argument.md",
+        "status": 400,
+        "title": "Request payload is not valid",
+        "detail": "Invalid argument for creating a new todo",
+        "instance": "",
+        "errors": {
+          "Title": [
+            "Title is required, cannot be empty or white spaces"
+          ]
+        },
+        "extensions": {
+          "traceId": "{Scrubbed}"
+        }
+      }
+    }
+  },
+  {
+    "Description": "Should not create without any tags",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/todos",
+      "Payload": {
+        "Title": "Title"
+      }
+    },
+    "Response": {
+      "StatusCode": "BadRequest",
+      "Payload": {
+        "type": "https://github.com/ArturWincenciak/teo-test-builder/doc/problem-details/invalid-todo-app-argument.md",
+        "status": 400,
+        "title": "Request payload is not valid",
+        "detail": "Invalid argument for creating a new todo",
+        "instance": "",
+        "errors": {
+          "Tags": [
+            "At least one tag is required"
+          ]
+        },
+        "extensions": {
+          "traceId": "{Scrubbed}"
+        }
+      }
+    }
+  },
+  {
+    "Description": "Should not create without title and tags",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/todos",
+      "Payload": {
+        "Title": ""
+      }
+    },
+    "Response": {
+      "StatusCode": "BadRequest",
+      "Payload": {
+        "type": "https://github.com/ArturWincenciak/teo-test-builder/doc/problem-details/invalid-todo-app-argument.md",
+        "status": 400,
+        "title": "Request payload is not valid",
+        "detail": "Invalid argument for creating a new todo",
+        "instance": "",
+        "errors": {
+          "Title": [
+            "Title is required, cannot be empty or white spaces"
+          ],
+          "Tags": [
+            "At least one tag is required"
+          ]
+        },
+        "extensions": {
+          "traceId": "{Scrubbed}"
+        }
+      }
+    }
+  },
+  {
+    "Description": "Should not create with whitespace tag",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/todos",
+      "Payload": {
+        "Title": "Title",
+        "Tags": [
+          "tag with space"
+        ]
+      }
+    },
+    "Response": {
+      "StatusCode": "BadRequest",
+      "Payload": {
+        "type": "https://github.com/ArturWincenciak/teo-test-builder/doc/problem-details/invalid-todo-app-argument.md",
+        "status": 400,
+        "title": "Request payload is not valid",
+        "detail": "Invalid argument for creating a new todo",
+        "instance": "",
+        "errors": {
+          "Tags": [
+            "Tags cannot be empty or contain spaces"
+          ]
+        },
+        "extensions": {
+          "traceId": "{Scrubbed}"
+        }
+      }
+    }
+  }
+]

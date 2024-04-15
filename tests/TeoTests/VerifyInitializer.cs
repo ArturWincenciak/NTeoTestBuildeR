@@ -12,5 +12,6 @@ public class VerifyInitializer
         VerifierSettings.InitializePlugins();
         VerifierSettings.UseStrictJson();
         VerifierSettings.ScrubInlineGuids();
+        VerifierSettings.ScrubMembers("traceId");
     }
 }

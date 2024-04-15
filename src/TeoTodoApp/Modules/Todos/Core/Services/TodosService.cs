@@ -1,3 +1,4 @@
+using NTeoTestBuildeR.Infra.ErrorHandling.Exceptions;
 using NTeoTestBuildeR.Modules.Todos.Api;
 using NTeoTestBuildeR.Modules.Todos.Core.Exceptions;
 using NTeoTestBuildeR.Modules.Todos.Core.Model;
@@ -10,6 +11,21 @@ public sealed class TodosService
 
     public CreateTodo.Response Create(CreateTodo cmd)
     {
+        ValidateArgument(detail: "Invalid argument for creating a new todo", with: exception =>
+        {
+            if (string.IsNullOrWhiteSpace(cmd.Dto.Title))
+                exception.WithError(code: $"{nameof(cmd.Dto.Title)}",
+                    values: ["Title is required, cannot be empty or white spaces"]);
+
+            if (cmd.Dto.Tags.Length == 0)
+                exception.WithError(code: $"{nameof(cmd.Dto.Tags)}",
+                    values: ["At least one tag is required"]);
+
+            if (cmd.Dto.Tags.Any(tag => string.IsNullOrWhiteSpace(tag) || tag.Contains(' ')))
+                exception.WithError(code: $"{nameof(cmd.Dto.Tags)}",
+                    values: ["Tags cannot be empty or contain spaces"]);
+        });
+
         var id = Guid.NewGuid();
         Todos.Add(id, value: new()
         {
@@ -24,6 +40,21 @@ public sealed class TodosService
 
     public void Update(UpdateTodo cmd)
     {
+        ValidateArgument(detail: "Invalid argument for updating existing todo", with: exception =>
+        {
+            if (string.IsNullOrWhiteSpace(cmd.Dto.Title))
+                exception.WithError(code: $"{nameof(cmd.Dto.Title)}",
+                    values: ["Title is required, cannot be empty or white spaces"]);
+
+            if (cmd.Dto.Tags.Length == 0)
+                exception.WithError(code: $"{nameof(cmd.Dto.Tags)}",
+                    values: ["At least one tag is required"]);
+
+            if (cmd.Dto.Tags.Any(tag => string.IsNullOrWhiteSpace(tag) || tag.Contains(' ')))
+                exception.WithError(code: $"{nameof(cmd.Dto.Tags)}",
+                    values: ["Tags cannot be empty or contain spaces"]);
+        });
+
         if (!Todos.TryGetValue(cmd.Id, value: out var todo))
             throw new TodoNotFoundException($"Todo with ID {cmd.Id} not found");
 
@@ -54,4 +85,14 @@ public sealed class TodosService
                 .Select(tag => new GetTodos.Tag(tag, Count: null))
                 .ToArray()))
             .ToArray());
+
+    private static void ValidateArgument(string detail, Action<AppArgumentException> with)
+    {
+        var exception = new InvalidTodoAppArgumentException(detail);
+
+        with(exception);
+
+        if (exception.HasErrors)
+            throw exception;
+    }
 }

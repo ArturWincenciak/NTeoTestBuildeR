@@ -83,7 +83,7 @@ public class TodosHappyPathTests
         // assert
         await Verify(actual);
     }
-    
+
     [Fact]
     public async Task ChangeTagsAndMarkTodoAsDone()
     {

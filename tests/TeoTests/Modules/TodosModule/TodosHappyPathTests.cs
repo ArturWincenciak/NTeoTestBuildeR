@@ -20,4 +20,63 @@ public class TodosHappyPathTests
         // assert
         await Verify(actual);
     }
+
+    [Fact]
+    public async Task DoneTodo()
+    {
+        // assert
+        var title = "Land on the moon";
+        var tag = "astronomy";
+
+        // act
+        var actual = await new TodosTestBuilder()
+            .CreateTodo(description: "Set up a to-do", title, tags: [tag])
+            .GetTodo(description: "Retrieve already created to-do item")
+            .DoneTodo(description: "Mark the to-do as done")
+            .GetTodo(description: "Retrieve the to-do that has been done")
+            .Build();
+
+        // assert
+        await Verify(actual);
+    }
+
+    [Fact]
+    public async Task ChangeTodoTitle()
+    {
+        // arrange 
+        var title = "Land on the Mars";
+        var newTitle = "Terraform Mars";
+        var tag = "astronomy";
+
+        // act
+        var actual = await new TodosTestBuilder()
+            .CreateTodo(description: "Set up a to-do", title, tags: [tag])
+            .GetTodo(description: "Retrieve already created to-do item")
+            .ChangeTitle(description: "Change title from 'Land' to 'Terraform'", newTitle)
+            .GetTodo(description: "Retrieve the to-do that has been changed")
+            .Build();
+
+        // assert
+        await Verify(actual);
+    }
+
+    [Fact]
+    public async Task ChangeTodoTags()
+    {
+        // arrange 
+        var title = "Land on the Mars";
+        string[] tags = ["astronomy"];
+        string[] newTags = ["astronomy", "practical"];
+
+        // act
+        var actual = await new TodosTestBuilder()
+            .CreateTodo(description: "Set up a to-do", title, tags)
+            .GetTodo(description: "Retrieve already created to-do item")
+            .ChangeTags(description: "Change tags by adding one more tag", newTags)
+            .GetTodo(description: "Retrieve the to-do that has been changed")
+            .Build();
+
+        // assert
+        await Verify(actual);
+    }
 }

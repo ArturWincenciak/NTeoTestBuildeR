@@ -1,0 +1,85 @@
+﻿[
+  {
+    "Description": "Set up a to-do",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/todos",
+      "Payload": {
+        "Title": "Land on the Mars",
+        "Tags": [
+          "astronomy"
+        ]
+      }
+    },
+    "Response": {
+      "StatusCode": "Created",
+      "Headers": {
+        "Location": [
+          "/Todos/Guid_1"
+        ]
+      },
+      "Payload": {
+        "Id": "Guid_1"
+      }
+    }
+  },
+  {
+    "Description": "Retrieve already created to-do item",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/Todos/Guid_1"
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "Title": "Land on the Mars",
+        "Tags": [
+          "astronomy"
+        ],
+        "Done": false
+      }
+    }
+  },
+  {
+    "Description": "Change title from 'Land' to 'Terraform'",
+    "Request": {
+      "Method": {
+        "Method": "PUT"
+      },
+      "Path": "http://localhost/Todos/Guid_1",
+      "Payload": {
+        "Title": "Terraform Mars",
+        "Tags": [
+          "astronomy"
+        ],
+        "Done": false
+      }
+    },
+    "Response": {
+      "StatusCode": "NoContent"
+    }
+  },
+  {
+    "Description": "Retrieve the to-do that has been changed",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/Todos/Guid_1"
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "Title": "Terraform Mars",
+        "Tags": [
+          "astronomy"
+        ],
+        "Done": false
+      }
+    }
+  }
+]

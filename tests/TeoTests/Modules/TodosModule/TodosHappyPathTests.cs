@@ -1,5 +1,3 @@
-using System.Net.Http.Json;
-using NTeoTestBuildeR.Modules.Todos.Api;
 using TeoTests.Modules.TodosModule.Builder;
 
 namespace TeoTests.Modules.TodosModule;
@@ -15,18 +13,11 @@ public class TodosHappyPathTests
 
         // act
         var actual = await new TodosTestBuilder()
-            .CreateTodo(title, tags: [tag])
-            .GetTodo()
+            .CreateTodo(description: "Create a to-do item with success", title, tags: [tag])
+            .GetTodo(description: "Get already created to-do item")
             .Build();
 
         // assert
         await Verify(actual);
-
-        // *** or like that ***
-        // var creatHttpResponse = actual.First();
-        // var createdPayloadResponse = await creatHttpResponse.Content.ReadFromJsonAsync<CreateTodo.Response>();
-        // var getActual = actual.Last();
-        // var getPayloadResponse = await getActual.Content.ReadFromJsonAsync<GetTodo.Response>();
-        // await Verify(new {createdPayloadResponse, getPayloadResponse});
     }
 }

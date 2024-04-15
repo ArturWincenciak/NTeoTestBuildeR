@@ -1,72 +1,47 @@
 ﻿[
   {
-    "Version": "1.1",
-    "Content": {
-      "Headers": [
-        {
-          "Content-Type": [
-            "application/json; charset=utf-8"
-          ]
-        }
-      ]
-    },
-    "StatusCode": "Created",
-    "ReasonPhrase": "Created",
-    "Headers": [
-      {
-        "Location": [
-          "/Todos/Guid_1"
-        ]
-      }
-    ],
-    "TrailingHeaders": [],
-    "RequestMessage": {
-      "Version": "1.1",
-      "Content": {
-        "Headers": [
-          {
-            "Content-Type": [
-              "application/json; charset=utf-8"
-            ]
-          },
-          {
-            "Content-Length": [
-              "60"
-            ]
-          }
-        ]
-      },
+    "Description": "Create a to-do item with success",
+    "Request": {
       "Method": {
         "Method": "POST"
       },
-      "RequestUri": "http://localhost/todos",
-      "Headers": []
+      "Path": "http://localhost/todos",
+      "Payload": {
+        "Title": "Prove Riemann's hypothesis",
+        "Tags": [
+          "match"
+        ]
+      }
     },
-    "IsSuccessStatusCode": true
+    "Response": {
+      "StatusCode": "Created",
+      "Headers": {
+        "Location": [
+          "/Todos/Guid_1"
+        ]
+      },
+      "Payload": {
+        "Id": "Guid_1"
+      }
+    }
   },
   {
-    "Version": "1.1",
-    "Content": {
-      "Headers": [
-        {
-          "Content-Type": [
-            "application/json; charset=utf-8"
-          ]
-        }
-      ]
-    },
-    "StatusCode": "OK",
-    "ReasonPhrase": "OK",
-    "Headers": [],
-    "TrailingHeaders": [],
-    "RequestMessage": {
-      "Version": "1.1",
+    "Description": "Get already created to-do item",
+    "Request": {
       "Method": {
         "Method": "GET"
       },
-      "RequestUri": "http://localhost/Todos/4f5d6eb1-ffc0-41eb-aa18-74b9bb159795",
-      "Headers": []
+      "Path": "http://localhost/Todos/Guid_1"
     },
-    "IsSuccessStatusCode": true
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "Title": "Prove Riemann's hypothesis",
+        "Tags": [
+          "match"
+        ],
+        "Done": false
+      }
+    }
   }
 ]

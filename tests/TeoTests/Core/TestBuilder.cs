@@ -3,7 +3,7 @@ namespace TeoTests.Core;
 public abstract class TestBuilder
 {
     private readonly HttpClient _httpClient;
-    private readonly List<Func<Task<HttpResponseMessage>>> _steps = [];
+    private readonly List<Func<Task<object?>>> _steps = [];
 
     protected TestBuilder()
     {
@@ -11,12 +11,12 @@ public abstract class TestBuilder
         _httpClient = appFactory.CreateClient();
     }
 
-    protected void With(Func<HttpClient, Task<HttpResponseMessage>> step) =>
+    protected void With(Func<HttpClient, Task<object?>> step) =>
         _steps.Add(() => step(_httpClient));
 
-    public async Task<List<HttpResponseMessage>> Build()
+    public async Task<List<object?>> Build()
     {
-        var result = new List<HttpResponseMessage>();
+        var result = new List<object?>();
 
         foreach (var step in _steps)
             result.Add(await step());

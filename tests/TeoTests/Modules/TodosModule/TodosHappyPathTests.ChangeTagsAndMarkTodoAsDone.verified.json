@@ -1,0 +1,154 @@
+﻿[
+  {
+    "Description": "Set up first theoretical to-do",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/todos",
+      "Payload": {
+        "Title": "Define theory of everything Guid_1",
+        "Tags": [
+          "astronomy"
+        ]
+      }
+    },
+    "Response": {
+      "StatusCode": "Created",
+      "Headers": {
+        "Location": [
+          "/Todos/Guid_2"
+        ]
+      },
+      "Payload": {
+        "Id": "Guid_2"
+      }
+    }
+  },
+  {
+    "Description": "Set up second practical to-do",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/todos",
+      "Payload": {
+        "Title": "Flight to Alpha Centauri Guid_1",
+        "Tags": [
+          "astronomy"
+        ]
+      }
+    },
+    "Response": {
+      "StatusCode": "Created",
+      "Headers": {
+        "Location": [
+          "/Todos/Guid_3"
+        ]
+      },
+      "Payload": {
+        "Id": "Guid_3"
+      }
+    }
+  },
+  {
+    "Description": "Change tags of the theory",
+    "Request": {
+      "Method": {
+        "Method": "PUT"
+      },
+      "Path": "http://localhost/Todos/Guid_2",
+      "Payload": {
+        "Title": "Define theory of everything Guid_1",
+        "Tags": [
+          "physics",
+          "theoretical"
+        ],
+        "Done": false
+      }
+    },
+    "Response": {
+      "StatusCode": "NoContent"
+    }
+  },
+  {
+    "Description": "Change tags of the practice",
+    "Request": {
+      "Method": {
+        "Method": "PUT"
+      },
+      "Path": "http://localhost/Todos/Guid_3",
+      "Payload": {
+        "Title": "Flight to Alpha Centauri Guid_1",
+        "Tags": [
+          "astronomy",
+          "practical"
+        ],
+        "Done": false
+      }
+    },
+    "Response": {
+      "StatusCode": "NoContent"
+    }
+  },
+  {
+    "Description": "Mark the theoretical to-do as done",
+    "Request": {
+      "Method": {
+        "Method": "PUT"
+      },
+      "Path": "http://localhost/Todos/Guid_2",
+      "Payload": {
+        "Title": "Define theory of everything Guid_1",
+        "Tags": [
+          "physics",
+          "theoretical"
+        ],
+        "Done": true
+      }
+    },
+    "Response": {
+      "StatusCode": "NoContent"
+    }
+  },
+  {
+    "Description": "Retrieve the theoretical to-do that has been done",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/Todos/Guid_2"
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "Title": "Define theory of everything Guid_1",
+        "Tags": [
+          "physics",
+          "theoretical"
+        ],
+        "Done": true
+      }
+    }
+  },
+  {
+    "Description": "Retrieve the practical that has not been done yet",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/Todos/Guid_3"
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "Title": "Flight to Alpha Centauri Guid_1",
+        "Tags": [
+          "astronomy",
+          "practical"
+        ],
+        "Done": false
+      }
+    }
+  }
+]

@@ -7,7 +7,7 @@
       },
       "Path": "http://localhost/todos",
       "Payload": {
-        "Title": "Land on the Mars",
+        "Title": "Land on the Mars Guid_1",
         "Tags": [
           "astronomy"
         ]
@@ -17,11 +17,11 @@
       "StatusCode": "Created",
       "Headers": {
         "Location": [
-          "/Todos/Guid_1"
+          "/Todos/Guid_2"
         ]
       },
       "Payload": {
-        "Id": "Guid_1"
+        "Id": "Guid_2"
       }
     }
   },
@@ -31,12 +31,12 @@
       "Method": {
         "Method": "GET"
       },
-      "Path": "http://localhost/Todos/Guid_1"
+      "Path": "http://localhost/Todos/Guid_2"
     },
     "Response": {
       "StatusCode": "OK",
       "Payload": {
-        "Title": "Land on the Mars",
+        "Title": "Land on the Mars Guid_1",
         "Tags": [
           "astronomy"
         ],
@@ -50,9 +50,9 @@
       "Method": {
         "Method": "PUT"
       },
-      "Path": "http://localhost/Todos/Guid_1",
+      "Path": "http://localhost/Todos/Guid_2",
       "Payload": {
-        "Title": "Terraform Mars",
+        "Title": "Terraform Mars Guid_1",
         "Tags": [
           "astronomy"
         ],
@@ -69,12 +69,12 @@
       "Method": {
         "Method": "GET"
       },
-      "Path": "http://localhost/Todos/Guid_1"
+      "Path": "http://localhost/Todos/Guid_2"
     },
     "Response": {
       "StatusCode": "OK",
       "Payload": {
-        "Title": "Terraform Mars",
+        "Title": "Terraform Mars Guid_1",
         "Tags": [
           "astronomy"
         ],

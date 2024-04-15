@@ -7,7 +7,7 @@
       },
       "Path": "http://localhost/todos",
       "Payload": {
-        "Title": "Prove Riemann's hypothesis",
+        "Title": "Prove Riemann's hypothesis Guid_1",
         "Tags": [
           "match"
         ]
@@ -17,11 +17,11 @@
       "StatusCode": "Created",
       "Headers": {
         "Location": [
-          "/Todos/Guid_1"
+          "/Todos/Guid_2"
         ]
       },
       "Payload": {
-        "Id": "Guid_1"
+        "Id": "Guid_2"
       }
     }
   },
@@ -31,12 +31,12 @@
       "Method": {
         "Method": "GET"
       },
-      "Path": "http://localhost/Todos/Guid_1"
+      "Path": "http://localhost/Todos/Guid_2"
     },
     "Response": {
       "StatusCode": "OK",
       "Payload": {
-        "Title": "Prove Riemann's hypothesis",
+        "Title": "Prove Riemann's hypothesis Guid_1",
         "Tags": [
           "match"
         ],

@@ -1,7 +1,6 @@
 using System.Net.Http.Json;
 using NTeoTestBuildeR.Modules.Todos.Api;
 using TeoTests.Core;
-using TeoTests.Core.Verify;
 
 namespace TeoTests.Modules.TodosModule.Builder;
 
@@ -18,20 +17,9 @@ internal sealed class TodosTestBuilder : TestBuilder
             httpRequest.Content = JsonContent.Create(requestPayload);
             var httpResponse = await httpClient.SendAsync(httpRequest);
 
-            if (httpResponse.IsSuccessStatusCode)
-            {
-                var responsePayload = await httpResponse.Content.ReadFromJsonAsync<CreateTodo.Response>();
-                _state.Upsert(id: responsePayload!.Id.ToString(), title: title!, tags: tags!, done: false);
-
-                return new Actual(description,
-                    Request: Request.Create(httpRequest, requestPayload),
-                    Response: Response.Create(httpResponse, responsePayload));
-            }
-
-            var error = await httpResponse.Deserialize();
-            return new Actual(description,
-                Request: Request.Create(httpRequest, requestPayload),
-                Response: Response.Create(httpResponse, error));
+            return await httpResponse.DeserializeWith<CreateTodo.Response>(success: resultPayload =>
+                    _state.Upsert(id: resultPayload!.Id.ToString(), title: title!, tags: tags!, done: false),
+                description, httpRequest, requestPayload);
         });
         return this;
     }
@@ -44,20 +32,9 @@ internal sealed class TodosTestBuilder : TestBuilder
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, requestUri: $"/Todos/{testCase.Id}");
             var httpResponse = await httpClient.SendAsync(httpRequest);
 
-            if (httpResponse.IsSuccessStatusCode)
-            {
-                var responsePayload = await httpResponse.Content.ReadFromJsonAsync<GetTodo.Response>();
-                _state.Upsert(id: testCase.Id!, responsePayload!.Title, responsePayload.Tags, responsePayload.Done);
-
-                return new Actual(description,
-                    Request: Request.Create(httpRequest),
-                    Response: Response.Create(httpResponse, responsePayload));
-            }
-
-            var error = await httpResponse.Deserialize();
-            return new Actual(description,
-                Request: Request.Create(httpRequest),
-                Response: Response.Create(httpResponse, error));
+            return await httpResponse.DeserializeWith<GetTodo.Response>(success: resultPayload =>
+                    _state.Upsert(id: testCase.Id!, resultPayload!.Title, resultPayload.Tags, resultPayload.Done),
+                description, httpRequest);
         });
         return this;
     }
@@ -72,19 +49,9 @@ internal sealed class TodosTestBuilder : TestBuilder
             httpRequest.Content = JsonContent.Create(requestPayload);
             var httpResponse = await httpClient.SendAsync(httpRequest);
 
-            if (httpResponse.IsSuccessStatusCode)
-            {
-                _state.Upsert(id: testCase.Id!, title: testCase.Title!, tags: testCase.Tags!, done: true);
-
-                return new Actual(description,
-                    Request: Request.Create(httpRequest, requestPayload),
-                    Response: Response.Create(httpResponse));
-            }
-
-            var error = await httpResponse.Deserialize();
-            return new Actual(description,
-                Request: Request.Create(httpRequest, requestPayload),
-                Response: Response.Create(httpResponse, error));
+            return await httpResponse.DeserializeWith(success: () =>
+                    _state.Upsert(id: testCase.Id!, title: testCase.Title!, tags: testCase.Tags!, done: true),
+                description, httpRequest, requestPayload);
         });
         return this;
     }
@@ -99,19 +66,9 @@ internal sealed class TodosTestBuilder : TestBuilder
             httpRequest.Content = JsonContent.Create(requestPayload);
             var httpResponse = await httpClient.SendAsync(httpRequest);
 
-            if (httpResponse.IsSuccessStatusCode)
-            {
-                _state.Upsert(id: testCase.Id!, title: newTitle!, tags: testCase.Tags!, testCase.Done!.Value);
-
-                return new Actual(description,
-                    Request: Request.Create(httpRequest, requestPayload),
-                    Response: Response.Create(httpResponse));
-            }
-
-            var error = await httpResponse.Deserialize();
-            return new Actual(description,
-                Request: Request.Create(httpRequest, requestPayload),
-                Response: Response.Create(httpResponse, error));
+            return await httpResponse.DeserializeWith(success: () =>
+                    _state.Upsert(id: testCase.Id!, title: newTitle!, tags: testCase.Tags!, testCase.Done!.Value),
+                description, httpRequest, requestPayload);
         });
         return this;
     }
@@ -126,19 +83,9 @@ internal sealed class TodosTestBuilder : TestBuilder
             httpRequest.Content = JsonContent.Create(requestPayload);
             var httpResponse = await httpClient.SendAsync(httpRequest);
 
-            if (httpResponse.IsSuccessStatusCode)
-            {
-                _state.Upsert(id: testCase.Id!, title: testCase.Title!, tags: newTags!, testCase.Done!.Value);
-
-                return new Actual(description,
-                    Request: Request.Create(httpRequest, requestPayload),
-                    Response: Response.Create(httpResponse));
-            }
-
-            var error = await httpResponse.Deserialize();
-            return new Actual(description,
-                Request: Request.Create(httpRequest, requestPayload),
-                Response: Response.Create(httpResponse, error));
+            return await httpResponse.DeserializeWith(success: () =>
+                    _state.Upsert(id: testCase.Id!, title: testCase.Title!, tags: newTags!, testCase.Done!.Value),
+                description, httpRequest, requestPayload);
         });
         return this;
     }

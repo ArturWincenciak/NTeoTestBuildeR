@@ -26,6 +26,21 @@ public class TodosWithCalendarTestsV1
         // assert
         await Verify(actual);
     }
+    
+    [Fact]
+    public async Task GetEmptyCalendarTodos()
+    {
+        // act
+        var actual = await new TodosTestBuilder()
+            .WithWiremock(GetCalendarEventsReturnsZeroItems())
+            .GetTodos(description: "Retrieve items from the calendar", tags: ["calendar-event"])
+            .Build();
+
+        // App.Wiremock.Inspect();
+
+        // assert
+        await Verify(actual);
+    }
 
     private static Action<(IRequestBuilder request, IResponseBuilder response)> GetCalendarEventsReturnsFewItems() =>
         server =>
@@ -44,6 +59,19 @@ public class TodosWithCalendarTestsV1
                     new(Id: Guid.NewGuid(), Name: "Sprint review", Type: "todo-list", When: UtcNow.AddDays(2)),
                     new(Id: Guid.NewGuid(), Name: "Finish app", Type: "todo-list", When: UtcNow.AddDays(120))
                 }))
+                .WithStatusCode(HttpStatusCode.OK);
+        };
+    
+    private static Action<(IRequestBuilder request, IResponseBuilder response)> GetCalendarEventsReturnsZeroItems() =>
+        server =>
+        {
+            server.request
+                .WithPath("/calendar/events")
+                .WithParam(key: "type", "todo-list")
+                .UsingGet();
+
+            server.response
+                .WithBody(JsonSerializer.Serialize(Array.Empty<CalendarClient.EventItemResponse>()))
                 .WithStatusCode(HttpStatusCode.OK);
         };
 }

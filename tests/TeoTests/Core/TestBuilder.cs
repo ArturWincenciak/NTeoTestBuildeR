@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using TeoTests.Core.Verify;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
@@ -9,20 +10,34 @@ namespace TeoTests.Core;
 public abstract class TestBuilder<TBuilder>
     where TBuilder : TestBuilder<TBuilder>
 {
+    private readonly Activity _activity = new Activity(Guid.NewGuid().ToString()).Start();
     private readonly HttpClient _httpClient = App.HttpClient;
     private readonly List<Func<Task<object?>>> _steps = [];
 
-    protected void With(Func<HttpClient, Task<object?>> step) =>
-        _steps.Add(() => step(_httpClient));
+    protected void With(Func<Task<object?>> step) =>
+        _steps.Add(step);
 
     public async Task<List<object?>> Build()
     {
-        var result = new List<object?>();
+        try
+        {
+            var result = new List<object?>();
 
-        foreach (var step in _steps)
-            result.Add(await step());
+            foreach (var step in _steps)
+                result.Add(await step());
 
-        return result;
+            return result;
+        }
+        finally
+        {
+            _activity.Dispose();
+        }
+    }
+
+    protected Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
+    {
+        request.Headers.Add(name: "traceparent", _activity.Id);
+        return _httpClient.SendAsync(request);
     }
 
     internal TBuilder WithWiremock(Action<(IRequestBuilder request, IResponseBuilder response)> configure)
@@ -33,7 +48,7 @@ public abstract class TestBuilder<TBuilder>
 
     private void BuildWiremock(Action<(IRequestBuilder request, IResponseBuilder response)> configure)
     {
-        var requestBuilder = Request.Create();
+        var requestBuilder = Request.Create().WithHeader(name: "traceparent", pattern: $"*{_activity.TraceId}*");
         var responseBuilder = Response.Create();
 
         configure((requestBuilder, responseBuilder));

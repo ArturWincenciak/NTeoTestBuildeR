@@ -12,12 +12,12 @@ internal sealed class TodosTestBuilder : TestBuilder<TodosTestBuilder>
 
     internal TodosTestBuilder CreateTodo(string description, string? title, string?[]? tags)
     {
-        With(async httpClient =>
+        With(async () =>
         {
             var requestPayload = new CreateTodo.Request(Title: title!, Tags: tags!);
             var httpRequest = new HttpRequestMessage(HttpMethod.Post, requestUri: "/todos");
             httpRequest.Content = JsonContent.Create(requestPayload);
-            var httpResponse = await httpClient.SendAsync(httpRequest);
+            var httpResponse = await SendAsync(httpRequest);
 
             return await httpResponse.DeserializeWith<CreateTodo.Response>(success: resultPayload =>
                     _state.Upsert(id: resultPayload!.Id.ToString(), title: title!, tags: tags!, done: false),
@@ -28,11 +28,11 @@ internal sealed class TodosTestBuilder : TestBuilder<TodosTestBuilder>
 
     internal TodosTestBuilder GetTodo(string description, string whichTitle)
     {
-        With(async httpClient =>
+        With(async () =>
         {
             var testCase = _state.SelectByTitle(whichTitle);
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, requestUri: $"/Todos/{testCase.Id}");
-            var httpResponse = await httpClient.SendAsync(httpRequest);
+            var httpResponse = await SendAsync(httpRequest);
 
             return await httpResponse.DeserializeWith<GetTodo.Response>(success: resultPayload =>
                     _state.Upsert(id: testCase.Id!, resultPayload!.Title, resultPayload.Tags, resultPayload.Done),
@@ -43,13 +43,13 @@ internal sealed class TodosTestBuilder : TestBuilder<TodosTestBuilder>
 
     internal TodosTestBuilder DoneTodo(string description, string whichTitle)
     {
-        With(async httpClient =>
+        With(async () =>
         {
             var testCase = _state.SelectByTitle(whichTitle);
             var httpRequest = new HttpRequestMessage(HttpMethod.Put, requestUri: $"/Todos/{testCase.Id}");
             var requestPayload = new UpdateTodo.Request(Title: testCase.Title!, Tags: testCase.Tags!, Done: true);
             httpRequest.Content = JsonContent.Create(requestPayload);
-            var httpResponse = await httpClient.SendAsync(httpRequest);
+            var httpResponse = await SendAsync(httpRequest);
 
             return await httpResponse.DeserializeWith(success: () =>
                     _state.Upsert(id: testCase.Id!, title: testCase.Title!, tags: testCase.Tags!, done: true),
@@ -60,13 +60,13 @@ internal sealed class TodosTestBuilder : TestBuilder<TodosTestBuilder>
 
     internal TodosTestBuilder ChangeTitle(string description, string oldTitle, string? newTitle)
     {
-        With(async httpClient =>
+        With(async () =>
         {
             var testCase = _state.SelectByTitle(oldTitle);
             var httpRequest = new HttpRequestMessage(HttpMethod.Put, requestUri: $"/Todos/{testCase.Id}");
             var requestPayload = new UpdateTodo.Request(Title: newTitle!, Tags: testCase.Tags!, testCase.Done!.Value);
             httpRequest.Content = JsonContent.Create(requestPayload);
-            var httpResponse = await httpClient.SendAsync(httpRequest);
+            var httpResponse = await SendAsync(httpRequest);
 
             return await httpResponse.DeserializeWith(success: () =>
                     _state.Upsert(id: testCase.Id!, title: newTitle!, tags: testCase.Tags!, testCase.Done!.Value),
@@ -77,13 +77,13 @@ internal sealed class TodosTestBuilder : TestBuilder<TodosTestBuilder>
 
     internal TodosTestBuilder ChangeTags(string description, string whichTitle, string?[]? newTags)
     {
-        With(async httpClient =>
+        With(async () =>
         {
             var testCase = _state.SelectByTitle(whichTitle);
             var httpRequest = new HttpRequestMessage(HttpMethod.Put, requestUri: $"/Todos/{testCase.Id}");
             var requestPayload = new UpdateTodo.Request(Title: testCase.Title!, Tags: newTags!, testCase.Done!.Value);
             httpRequest.Content = JsonContent.Create(requestPayload);
-            var httpResponse = await httpClient.SendAsync(httpRequest);
+            var httpResponse = await SendAsync(httpRequest);
 
             return await httpResponse.DeserializeWith(success: () =>
                     _state.Upsert(id: testCase.Id!, title: testCase.Title!, tags: newTags!, testCase.Done!.Value),
@@ -94,11 +94,11 @@ internal sealed class TodosTestBuilder : TestBuilder<TodosTestBuilder>
 
     internal TodosTestBuilder GetTodos(string description, string?[]? tags)
     {
-        With(async httpClient =>
+        With(async () =>
         {
             var query = new QueryBuilder {{"tags", tags!}};
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, requestUri: $"/todos{query.ToQueryString()}");
-            var httpResponse = await httpClient.SendAsync(httpRequest);
+            var httpResponse = await SendAsync(httpRequest);
 
             return await httpResponse.DeserializeWith<GetTodos.Response>(
                 success: resultPayload =>

@@ -1,9 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using NTeoTestBuildeR.Modules.Todos.Core.Services;
-using TeoTests.Core.Verify;
 using TeoTests.Modules.TodosModule.Builder;
-using WireMock.Net.Extensions.WireMockInspector;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using static System.DateTime;
@@ -26,7 +24,7 @@ public class TodosWithCalendarTestsV1
         // assert
         await Verify(actual);
     }
-    
+
     [Fact]
     public async Task GetEmptyCalendarTodos()
     {
@@ -61,7 +59,7 @@ public class TodosWithCalendarTestsV1
                 }))
                 .WithStatusCode(HttpStatusCode.OK);
         };
-    
+
     private static Action<(IRequestBuilder request, IResponseBuilder response)> GetCalendarEventsReturnsZeroItems() =>
         server =>
         {

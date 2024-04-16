@@ -13,5 +13,6 @@ public class VerifyInitializer
         VerifierSettings.UseStrictJson();
         VerifierSettings.ScrubInlineGuids();
         VerifierSettings.ScrubMembers("traceId");
+        VerifierSettings.ScrubMembers("traceparent");
     }
 }

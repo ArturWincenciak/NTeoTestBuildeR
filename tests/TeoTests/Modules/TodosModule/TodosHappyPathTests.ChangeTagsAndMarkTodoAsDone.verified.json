@@ -6,6 +6,9 @@
         "Method": "POST"
       },
       "Path": "http://localhost/todos",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      },
       "Payload": {
         "Title": "Define theory of everything Guid_1",
         "Tags": [
@@ -32,6 +35,9 @@
         "Method": "POST"
       },
       "Path": "http://localhost/todos",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      },
       "Payload": {
         "Title": "Flight to Alpha Centauri Guid_1",
         "Tags": [
@@ -58,6 +64,9 @@
         "Method": "PUT"
       },
       "Path": "http://localhost/Todos/Guid_2",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      },
       "Payload": {
         "Title": "Define theory of everything Guid_1",
         "Tags": [
@@ -78,6 +87,9 @@
         "Method": "PUT"
       },
       "Path": "http://localhost/Todos/Guid_3",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      },
       "Payload": {
         "Title": "Flight to Alpha Centauri Guid_1",
         "Tags": [
@@ -98,6 +110,9 @@
         "Method": "PUT"
       },
       "Path": "http://localhost/Todos/Guid_2",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      },
       "Payload": {
         "Title": "Define theory of everything Guid_1",
         "Tags": [
@@ -117,7 +132,10 @@
       "Method": {
         "Method": "GET"
       },
-      "Path": "http://localhost/Todos/Guid_2"
+      "Path": "http://localhost/Todos/Guid_2",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
     },
     "Response": {
       "StatusCode": "OK",
@@ -137,7 +155,10 @@
       "Method": {
         "Method": "GET"
       },
-      "Path": "http://localhost/Todos/Guid_3"
+      "Path": "http://localhost/Todos/Guid_3",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
     },
     "Response": {
       "StatusCode": "OK",

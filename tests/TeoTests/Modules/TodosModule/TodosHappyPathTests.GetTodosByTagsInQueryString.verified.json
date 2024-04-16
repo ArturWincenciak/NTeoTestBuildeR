@@ -6,6 +6,9 @@
         "Method": "POST"
       },
       "Path": "http://localhost/todos",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      },
       "Payload": {
         "Title": "Prove Riemann's hypothesis",
         "Tags": [
@@ -33,6 +36,9 @@
         "Method": "POST"
       },
       "Path": "http://localhost/todos",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      },
       "Payload": {
         "Title": "Define theory of everything",
         "Tags": [
@@ -60,6 +66,9 @@
         "Method": "POST"
       },
       "Path": "http://localhost/todos",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      },
       "Payload": {
         "Title": "Conduct a measurement of the gravitational wave",
         "Tags": [
@@ -86,7 +95,10 @@
       "Method": {
         "Method": "GET"
       },
-      "Path": "http://localhost/todos?tags=match-Guid_1"
+      "Path": "http://localhost/todos?tags=match-Guid_1",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
     },
     "Response": {
       "StatusCode": "OK",
@@ -115,7 +127,10 @@
       "Method": {
         "Method": "GET"
       },
-      "Path": "http://localhost/todos?tags=physics-Guid_1"
+      "Path": "http://localhost/todos?tags=physics-Guid_1",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
     },
     "Response": {
       "StatusCode": "OK",
@@ -157,7 +172,10 @@
       "Method": {
         "Method": "GET"
       },
-      "Path": "http://localhost/todos?tags=theoretical-Guid_1"
+      "Path": "http://localhost/todos?tags=theoretical-Guid_1",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
     },
     "Response": {
       "StatusCode": "OK",
@@ -199,7 +217,10 @@
       "Method": {
         "Method": "GET"
       },
-      "Path": "http://localhost/todos?tags=experimental-Guid_1"
+      "Path": "http://localhost/todos?tags=experimental-Guid_1",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
     },
     "Response": {
       "StatusCode": "OK",
@@ -228,7 +249,10 @@
       "Method": {
         "Method": "GET"
       },
-      "Path": "http://localhost/todos?tags=match-Guid_1&tags=theoretical-Guid_1"
+      "Path": "http://localhost/todos?tags=match-Guid_1&tags=theoretical-Guid_1",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
     },
     "Response": {
       "StatusCode": "OK",
@@ -257,7 +281,10 @@
       "Method": {
         "Method": "GET"
       },
-      "Path": "http://localhost/todos?tags=physics-Guid_1&tags=theoretical-Guid_1"
+      "Path": "http://localhost/todos?tags=physics-Guid_1&tags=theoretical-Guid_1",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
     },
     "Response": {
       "StatusCode": "OK",
@@ -286,7 +313,10 @@
       "Method": {
         "Method": "GET"
       },
-      "Path": "http://localhost/todos?tags=physics-Guid_1&tags=experimental-Guid_1"
+      "Path": "http://localhost/todos?tags=physics-Guid_1&tags=experimental-Guid_1",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
     },
     "Response": {
       "StatusCode": "OK",

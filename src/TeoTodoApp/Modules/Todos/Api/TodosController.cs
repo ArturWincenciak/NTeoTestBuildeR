@@ -15,9 +15,9 @@ public sealed class TodosController(TodosService service) : ControllerBase
     [HttpPost]
     [ProducesResponseType(type: typeof(CreateTodo.Response), StatusCodes.Status201Created)]
     [ProducesResponseType(type: typeof(ErrorHandling_ProblemDetails), StatusCodes.Status400BadRequest)]
-    public IActionResult Post(CreateTodo.Request body)
+    public async Task<IActionResult> Post(CreateTodo.Request body)
     {
-        var response = service.Create(new(body));
+        var response = await service.Create(new(body));
         return Created(uri: $"/{TODOS}/{response.Id}", response);
     }
 
@@ -25,9 +25,9 @@ public sealed class TodosController(TodosService service) : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(type: typeof(ErrorHandling_ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(type: typeof(ErrorHandling_ProblemDetails), StatusCodes.Status400BadRequest)]
-    public IActionResult Put(Guid id, UpdateTodo.Request body)
+    public async Task<IActionResult> Put(Guid id, UpdateTodo.Request body)
     {
-        service.Update(new(id, body));
+        await service.Update(new(id, body));
         return NoContent();
     }
 
@@ -35,11 +35,11 @@ public sealed class TodosController(TodosService service) : ControllerBase
     [ProducesResponseType(type: typeof(GetTodo.Response), StatusCodes.Status200OK)]
     [ProducesResponseType(type: typeof(ErrorHandling_ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(type: typeof(ErrorHandling_ProblemDetails), StatusCodes.Status400BadRequest)]
-    public IActionResult Get(Guid id) =>
-        Ok(service.GetTodo(new(new(id))));
+    public async Task<IActionResult> Get(Guid id) =>
+        Ok(await service.GetTodo(new(new(id))));
 
     [HttpGet]
     [ProducesResponseType(type: typeof(GetTodos.Response), StatusCodes.Status200OK)]
-    public IActionResult Get([FromQuery] GetTodos.Query query) =>
-        Ok(service.GetTodos(query));
+    public async Task<IActionResult> Get([FromQuery] GetTodos.Query query) =>
+        Ok(await service.GetTodos(query));
 }

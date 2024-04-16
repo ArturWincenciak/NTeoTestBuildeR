@@ -1,5 +1,7 @@
 using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 using NTeoTestBuildeR.Infra.ErrorHandling;
+using NTeoTestBuildeR.Modules.Todos.Core.DAL;
 using NTeoTestBuildeR.Modules.Todos.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +12,10 @@ builder.Services
     .AddControllers()
     .Services.AddSwaggerGen(options => options
         .CustomSchemaIds(type => type.FullName?
-            .Replace(oldValue: "+", string.Empty)));
+            .Replace(oldValue: "+", string.Empty)))
+    .AddDbContext<TeoAppDbContext>((serviceProvider, options) => options.UseNpgsql(
+        connectionString: serviceProvider.GetRequiredService<IConfiguration>().GetConnectionString("TeoTodoApp"),
+        npgsqlOptionsAction: npgsqlOptionsBuilder => npgsqlOptionsBuilder.EnableRetryOnFailure()));
 
 var application = builder.Build();
 application
@@ -18,6 +23,13 @@ application
     .UseSwaggerUI()
     .UseRouting()
     .UseMiddleware<ErrorHandlerMiddleware>();
+
+using (var scope = application.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<TeoAppDbContext>();
+    if (db.Database.GetPendingMigrations().Any())
+        db.Database.Migrate();
+}
 
 application.MapControllers();
 application.Run();

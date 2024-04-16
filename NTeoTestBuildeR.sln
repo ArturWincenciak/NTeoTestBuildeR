@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "items", "items", "{8EDEA64C
 		.gitignore = .gitignore
 		.gitattributes = .gitattributes
 		.bashrc = .bashrc
+		docker-compose.yaml = docker-compose.yaml
+		.dockerignore = .dockerignore
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{B6003DD5-A41F-43CF-BCF8-8D504422F423}"

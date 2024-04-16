@@ -1,0 +1,1 @@
+dotnet ef migrations add Init --project ./src/TeoTodoApp/NTeoTestBuildeR.csproj --output-dir ./Modules/Todos/Core/DAL/Migrations

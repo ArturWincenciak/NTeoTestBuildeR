@@ -1,15 +1,14 @@
+using Microsoft.EntityFrameworkCore;
 using NTeoTestBuildeR.Infra.ErrorHandling.Exceptions;
 using NTeoTestBuildeR.Modules.Todos.Api;
+using NTeoTestBuildeR.Modules.Todos.Core.DAL;
 using NTeoTestBuildeR.Modules.Todos.Core.Exceptions;
-using NTeoTestBuildeR.Modules.Todos.Core.Model;
 
 namespace NTeoTestBuildeR.Modules.Todos.Core.Services;
 
-public sealed class TodosService
+public sealed class TodosService(TeoAppDbContext db)
 {
-    private readonly static Dictionary<Guid, Todo> Todos = new();
-
-    public CreateTodo.Response Create(CreateTodo cmd)
+    public async Task<CreateTodo.Response> Create(CreateTodo cmd)
     {
         ValidateArgument(detail: "Invalid argument for creating a new todo", with: exception =>
         {
@@ -27,18 +26,19 @@ public sealed class TodosService
         });
 
         var id = Guid.NewGuid();
-        Todos.Add(id, value: new()
+        await db.Todos.AddAsync(new()
         {
             Id = id,
             Title = cmd.Dto.Title,
-            Done = false,
-            Tags = new() {Tags = cmd.Dto.Tags}
+            Tags = new() {Tags = cmd.Dto.Tags},
+            Done = false
         });
+        await db.SaveChangesAsync();
 
         return new(id);
     }
 
-    public void Update(UpdateTodo cmd)
+    public async Task Update(UpdateTodo cmd)
     {
         ValidateArgument(detail: "Invalid argument for updating existing todo", with: exception =>
         {
@@ -55,36 +55,47 @@ public sealed class TodosService
                     values: ["Tags cannot be empty or contain spaces"]);
         });
 
-        if (!Todos.TryGetValue(cmd.Id, value: out var todo))
+        var todo = await db.Todos
+            .SingleOrDefaultAsync(item => item.Id == cmd.Id);
+
+        if (todo is null)
             throw new TodoNotFoundException($"Todo with ID {cmd.Id} not found");
 
         if (todo.Done)
             throw new TodoAlreadyDoneException("Cannot update a todo that is already done");
 
-        Todos[todo.Id] = new()
-        {
-            Id = todo.Id,
-            Title = cmd.Dto.Title,
-            Done = cmd.Dto.Done,
-            Tags = new() {Tags = cmd.Dto.Tags}
-        };
+        todo.Title = cmd.Dto.Title;
+        todo.Tags = new() {Tags = cmd.Dto.Tags};
+        todo.Done = cmd.Dto.Done;
+
+        await db.SaveChangesAsync();
     }
 
-    public GetTodo.Response GetTodo(GetTodo query)
+    public async Task<GetTodo.Response> GetTodo(GetTodo query)
     {
-        if (!Todos.TryGetValue(query.Dto.Id, value: out var todo))
-            throw new TodoNotFoundException($"Todo with ID {query.Dto.Id} not found");
+        var todo = await db.Todos
+            .AsNoTracking()
+            .SingleOrDefaultAsync(item => item.Id == query.Dto.Id);
 
+        if (todo is null)
+            throw new TodoNotFoundException($"Todo with ID {query.Dto.Id} not found");
+        
         return new(todo.Title, todo.Tags.Tags, todo.Done);
     }
 
-    public GetTodos.Response GetTodos(GetTodos.Query query) =>
-        new(Todos.Values
+    public async Task<GetTodos.Response> GetTodos(GetTodos.Query query)
+    {
+        var todos = await db.Todos
+            .AsNoTracking()
             .Where(todo => query.Tags.All(queryTag => todo.Tags.Tags.Contains(queryTag)))
+            .ToListAsync();
+
+        return new(todos
             .Select(todo => new GetTodos.Item(todo.Id, todo.Title, Done: todo.Done, Tags: todo.Tags.Tags
                 .Select(tag => new GetTodos.Tag(tag, Count: null))
                 .ToArray()))
             .ToArray());
+    }
 
     private static void ValidateArgument(string detail, Action<AppArgumentException> with)
     {

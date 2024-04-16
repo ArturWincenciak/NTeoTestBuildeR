@@ -1,0 +1,415 @@
+﻿[
+  {
+    "Description": "Collect first work tag",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/stats",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "NoContent"
+    }
+  },
+  {
+    "Description": "Collect second work tag",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/stats",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "NoContent"
+    }
+  },
+  {
+    "Description": "Collect one taxes tag",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/stats",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "NoContent"
+    }
+  },
+  {
+    "Description": "Collect one holiday tag",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/stats",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "NoContent"
+    }
+  },
+  {
+    "Description": "Collect first car tag",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/stats",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "NoContent"
+    }
+  },
+  {
+    "Description": "Collect second car tag",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/stats",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "NoContent"
+    }
+  },
+  {
+    "Description": "Retrieve work stats",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/stats?tags=work",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "stats": [
+          {
+            "tag": "work",
+            "count": 2
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Retrieve taxes stats",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/stats?tags=taxes",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "stats": [
+          {
+            "tag": "taxes",
+            "count": 1
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Retrieve car stats",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/stats?tags=car",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "stats": [
+          {
+            "tag": "car",
+            "count": 2
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Retrieve holiday stats",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/stats?tags=holiday",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "stats": [
+          {
+            "tag": "holiday",
+            "count": 1
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Retrieve work and car stats",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/stats?tags=work&tags=car",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "stats": [
+          {
+            "tag": "work",
+            "count": 2
+          },
+          {
+            "tag": "car",
+            "count": 2
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Retrieve work and taxes stats",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/stats?tags=work&tags=taxes",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "stats": [
+          {
+            "tag": "work",
+            "count": 2
+          },
+          {
+            "tag": "taxes",
+            "count": 1
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Retrieve work, car, and taxes stats",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/stats?tags=work&tags=car&tags=taxes",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "stats": [
+          {
+            "tag": "work",
+            "count": 2
+          },
+          {
+            "tag": "taxes",
+            "count": 1
+          },
+          {
+            "tag": "car",
+            "count": 2
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Retrieve all stats",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/stats?tags=work&tags=car&tags=taxes&tags=holiday",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "stats": [
+          {
+            "tag": "work",
+            "count": 2
+          },
+          {
+            "tag": "taxes",
+            "count": 1
+          },
+          {
+            "tag": "holiday",
+            "count": 1
+          },
+          {
+            "tag": "car",
+            "count": 2
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Retrieve all stats",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/stats?tags=work&tags=car&tags=taxes&tags=holiday",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "stats": [
+          {
+            "tag": "work",
+            "count": 2
+          },
+          {
+            "tag": "taxes",
+            "count": 1
+          },
+          {
+            "tag": "holiday",
+            "count": 1
+          },
+          {
+            "tag": "car",
+            "count": 2
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Remove first work tag",
+    "Request": {
+      "Method": {
+        "Method": "DELETE"
+      },
+      "Path": "http://localhost/stats/work",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "NoContent"
+    }
+  },
+  {
+    "Description": "Retrieve work tag (expected value is one)",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/stats?tags=work",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "stats": [
+          {
+            "tag": "work",
+            "count": 1
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Remove second work tag",
+    "Request": {
+      "Method": {
+        "Method": "DELETE"
+      },
+      "Path": "http://localhost/stats/work",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "NoContent"
+    }
+  },
+  {
+    "Description": "Retrieve work tag (expected value is zero)",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/stats?tags=work",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "stats": [
+          {
+            "tag": "work",
+            "count": 0
+          }
+        ]
+      }
+    }
+  }
+]

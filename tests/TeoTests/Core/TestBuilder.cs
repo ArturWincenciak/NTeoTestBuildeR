@@ -13,6 +13,7 @@ public abstract class TestBuilder<TBuilder>
     private readonly Activity _activity = new Activity(Guid.NewGuid().ToString()).Start();
     private readonly HttpClient _httpClient = App.HttpClient;
     private readonly List<Func<Task<object?>>> _steps = [];
+    private readonly Dictionary<string, (IRequestBuilder Builder, int ExpectedCallCount)> _wiremockConfigs = new();
 
     protected void With(Func<Task<object?>> step) =>
         _steps.Add(step);
@@ -25,6 +26,8 @@ public abstract class TestBuilder<TBuilder>
 
             foreach (var step in _steps)
                 result.Add(await step());
+
+            AssertWiremockCallsCount();
 
             return result;
         }
@@ -40,21 +43,43 @@ public abstract class TestBuilder<TBuilder>
         return _httpClient.SendAsync(request);
     }
 
-    internal TBuilder WithWiremock(Action<(IRequestBuilder request, IResponseBuilder response)> configure)
+    internal TBuilder WithWiremock(Action<(IRequestBuilder request, IResponseBuilder response)> configure,
+        int expectedCallCount = 1)
     {
-        BuildWiremock(configure);
+        BuildWiremock(configure, expectedCallCount);
         return (TBuilder) this;
     }
 
-    private void BuildWiremock(Action<(IRequestBuilder request, IResponseBuilder response)> configure)
+    private void BuildWiremock(Action<(IRequestBuilder request, IResponseBuilder response)> configure,
+        int expectedCallCount)
     {
         var requestBuilder = Request.Create().WithHeader(name: "traceparent", pattern: $"*{_activity.TraceId}*");
         var responseBuilder = Response.Create();
 
         configure((requestBuilder, responseBuilder));
 
+        var id = Guid.NewGuid().ToString();
         App.Wiremock
             .Given(requestBuilder)
+            .WithTitle(id)
             .RespondWith(responseBuilder);
+
+        _wiremockConfigs.Add(id, value: (requestBuilder, expectedCallCount));
+    }
+
+    private void AssertWiremockCallsCount()
+    {
+        foreach (var config in _wiremockConfigs)
+        {
+            var logs = App.Wiremock.LogEntries
+                .Where(log => log.MappingTitle == config.Key)
+                .ToArray();
+
+            if (logs.Length == config.Value.ExpectedCallCount == false)
+                throw new InvalidOperationException(
+                    $"The Wiremock configuration {config.Key} is not used as expected. " +
+                    $"Expected: {config.Value.ExpectedCallCount}, Actual: {logs.Length}. " +
+                    $"Ensure all mocks are used at least once during the test..");
+        }
     }
 }

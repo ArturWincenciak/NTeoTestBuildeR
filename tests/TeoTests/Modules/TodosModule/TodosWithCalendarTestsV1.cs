@@ -16,7 +16,7 @@ public class TodosWithCalendarTestsV1
     {
         // act
         var actual = await new TodosTestBuilder()
-            .WithWiremock(GetCalendarEventsReturnsFewItems())
+            .WithWiremock(configure: GetCalendarEventsReturnsFewItems(), expectedCallCount: 1)
             .GetTodos(description: "Retrieve items from the calendar", tags: ["calendar-event"])
             .Build();
 

@@ -12,6 +12,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.3" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+        <PackageReference Include="Testcontainers.PostgreSql" Version="3.8.0" />
         <PackageReference Include="Verify.DiffPlex" Version="2.3.0" />
         <PackageReference Include="Verify.Xunit" Version="23.5.2" />
         <PackageReference Include="xunit" Version="2.7.0" />

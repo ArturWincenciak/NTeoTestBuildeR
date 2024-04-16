@@ -1,0 +1,18 @@
+@api = http://localhost:5091
+
+### Increase tag to stats
+POST {{api}}/stats
+Content-Type: application/json
+
+{
+  "tag": "phisics"
+}
+
+### Get stats by tags
+GET {{api}}/stats?tags=astronomy&tags=phisics
+Content-Type: application/json
+
+
+### Decrease tag in stats
+DELETE {{api}}/stats/phisics
+Content-Type: application/json

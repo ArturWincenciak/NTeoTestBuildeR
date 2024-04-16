@@ -1,0 +1,24 @@
+﻿[
+  {
+    "Description": "Retrieve items from the calendar",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/todos?tags=calendar-event"
+    },
+    "Response": {
+      "StatusCode": "InternalServerError",
+      "Payload": {
+        "type": "https://github.com/ArturWincenciak/teo-test-builder/doc/problem-details/internal-server-error.md",
+        "status": 500,
+        "title": "Internal server error",
+        "detail": "Unexpected error occurred",
+        "instance": "",
+        "extensions": {
+          "traceId": "{Scrubbed}"
+        }
+      }
+    }
+  }
+]

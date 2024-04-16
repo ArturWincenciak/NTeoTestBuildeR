@@ -23,7 +23,12 @@ builder.Services
             .GetSection("ExtCalendar:BaseAddress")
             .Get<string>() ??
         throw new CalendarClientUriException()))
-    .Services.AddMemoryCache();
+    .Services.AddMemoryCache()
+    .AddHttpClient<StatsClient>((serviceProvider, client) => client.BaseAddress = new(
+        serviceProvider.GetRequiredService<IConfiguration>()
+            .GetSection("StatsModule:BaseAddress")
+            .Get<string>() ??
+        throw new StatsClientUriException()));;
 
 var application = builder.Build();
 application

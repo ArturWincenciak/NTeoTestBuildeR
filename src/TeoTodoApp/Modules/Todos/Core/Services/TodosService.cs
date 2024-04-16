@@ -10,7 +10,8 @@ namespace NTeoTestBuildeR.Modules.Todos.Core.Services;
 public sealed class TodosService(
     TeoAppDbContext db,
     CalendarClient calendarClient,
-    IMemoryCache cache)
+    IMemoryCache cache,
+    StatsClient statsClient)
 {
     public async Task<CreateTodo.Response> Create(CreateTodo cmd)
     {
@@ -61,6 +62,9 @@ public sealed class TodosService(
         });
         await db.SaveChangesAsync();
 
+        foreach (var dtoTag in cmd.Dto.Tags)
+            await statsClient.AddStats(new(dtoTag));
+
         return new(id);
     }
 
@@ -94,11 +98,23 @@ public sealed class TodosService(
         if (todo.Done)
             throw new TodoAlreadyDoneException("Cannot update a todo that is already done");
 
+        var oldTags = todo.Tags.Tags;
+        var newTags = cmd.Dto.Tags;
         todo.Title = cmd.Dto.Title;
-        todo.Tags = new() {Tags = cmd.Dto.Tags};
+        todo.Tags = new() {Tags = newTags};
         todo.Done = cmd.Dto.Done;
 
         await db.SaveChangesAsync();
+
+        var isOldAndNewTagsEqual = oldTags.Length == newTags.Length && oldTags.All(oldTag => newTags.Contains(oldTag));
+        if (!isOldAndNewTagsEqual)
+        {
+            foreach (var oldTag in oldTags)
+                await statsClient.RemoveStats(new(oldTag));
+
+            foreach (var newTag in newTags)
+                await statsClient.AddStats(new(newTag));
+        }
     }
 
     public async Task<GetTodo.Response> GetTodo(GetTodo query)
@@ -137,9 +153,8 @@ public sealed class TodosService(
                 .Select(@event =>
                 {
                     var item = Map(eventItem: (@event.Id, @event.Name, @event.Type, @event.When), now);
-                    return new GetTodos.Item(item.Id, item.Title, Done: item.Done, Tags: item.Tags
-                        .Select(tag => new GetTodos.Tag(tag, Count: null))
-                        .ToArray());
+                    return new GetTodos.Item(item.Id, item.Title, Done: item.Done,
+                        Tags: item.Tags.Select(tag => new GetTodos.Tag(tag, Count: null)).ToArray());
                 })
                 .ToArray());
         }
@@ -149,10 +164,22 @@ public sealed class TodosService(
             .Where(todo => query.Tags.All(queryTag => todo.Tags.Tags.Contains(queryTag)))
             .ToListAsync();
 
+        var uniqueTags = todos
+            .SelectMany(todo => todo.Tags.Tags)
+            .ToArray();
+
+        var statsTags = await statsClient.GetStats(uniqueTags);
+
         return new(todos
-            .Select(todo => new GetTodos.Item(todo.Id, todo.Title, Done: todo.Done, Tags: todo.Tags.Tags
-                .Select(tag => new GetTodos.Tag(tag, Count: null))
-                .ToArray()))
+            .Select(todo =>
+            {
+                return new GetTodos.Item(todo.Id, todo.Title, Done: todo.Done,
+                    Tags: todo.Tags.Tags.Select(tag =>
+                    {
+                        var stat = statsTags.Stats.Single(stat => stat.Tag == tag);
+                        return new GetTodos.Tag(tag, stat.Count);
+                    }).ToArray());
+            })
             .ToArray());
     }
 

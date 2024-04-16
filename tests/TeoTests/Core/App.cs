@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using WireMock.Server;
 
-namespace TeoTests.Core.Verify;
+namespace TeoTests.Core;
 
 public sealed class App
 {

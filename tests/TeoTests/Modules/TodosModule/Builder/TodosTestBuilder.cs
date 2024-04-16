@@ -101,8 +101,15 @@ internal sealed class TodosTestBuilder : TestBuilder
             var httpResponse = await httpClient.SendAsync(httpRequest);
 
             return await httpResponse.DeserializeWith<GetTodos.Response>(
-                success: responsePayload => Actual.Create(description, httpRequest, httpResponse,
-                    requestPayload: null, responsePayload), description, httpRequest);
+                success: resultPayload =>
+                {
+                    var sortedItems = resultPayload!.Todos
+                        .OrderBy(todo => todo.Title)
+                        .ToArray();
+
+                    return Actual.Create(description, httpRequest, httpResponse, requestPayload: null,
+                        responsePayload: new GetTodos.Response(sortedItems));
+                }, description, httpRequest);
         });
         return this;
     }

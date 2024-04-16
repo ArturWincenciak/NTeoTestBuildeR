@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using NTeoTestBuildeR.Infra.ErrorHandling;
 using NTeoTestBuildeR.Modules.Todos.Core.DAL;
+using NTeoTestBuildeR.Modules.Todos.Core.Exceptions;
 using NTeoTestBuildeR.Modules.Todos.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +16,13 @@ builder.Services
             .Replace(oldValue: "+", string.Empty)))
     .AddDbContext<TeoAppDbContext>((serviceProvider, options) => options.UseNpgsql(
         connectionString: serviceProvider.GetRequiredService<IConfiguration>().GetConnectionString("TeoTodoApp"),
-        npgsqlOptionsAction: npgsqlOptionsBuilder => npgsqlOptionsBuilder.EnableRetryOnFailure()));
+        npgsqlOptionsAction: npgsqlOptionsBuilder => npgsqlOptionsBuilder.EnableRetryOnFailure()))
+    .AddScoped<CalendarClient>()
+    .AddHttpClient<CalendarClient>((serviceProvider, client) => client.BaseAddress = new(
+        serviceProvider.GetRequiredService<IConfiguration>()
+            .GetSection("ExtCalendar:BaseAddress")
+            .Get<string>() ??
+        throw new CalendarClientUriException()));
 
 var application = builder.Build();
 application

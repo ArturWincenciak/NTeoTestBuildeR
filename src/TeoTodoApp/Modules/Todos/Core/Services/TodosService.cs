@@ -6,7 +6,9 @@ using NTeoTestBuildeR.Modules.Todos.Core.Exceptions;
 
 namespace NTeoTestBuildeR.Modules.Todos.Core.Services;
 
-public sealed class TodosService(TeoAppDbContext db)
+public sealed class TodosService(
+    TeoAppDbContext db,
+    CalendarClient calendarClient)
 {
     public async Task<CreateTodo.Response> Create(CreateTodo cmd)
     {
@@ -25,6 +27,28 @@ public sealed class TodosService(TeoAppDbContext db)
                     values: ["Tags cannot be empty or contain spaces"]);
         });
 
+        if (cmd.Dto.Tags.Contains("calendar-event"))
+        {
+            ValidateArgument(detail: "Invalid additional tag argument for calendar-event tag", with: exception =>
+            {
+                if (cmd.Dto.Tags.Length != 2)
+                    exception.WithError(code: $"{nameof(cmd.Dto.Tags)}", values:
+                    [
+                        "Only two tags are allowed for calendar events, " +
+                        "first tag must be 'calendar-event' and the second tag must be a time tag"
+                    ]);
+                else if (DateTime.TryParse(s: cmd.Dto.Tags[1], out _) == false)
+                    exception.WithError(code: $"{nameof(cmd.Dto.Tags)}", values:
+                    [
+                        $"Second tag must be a valid date time but is '{cmd.Dto.Tags[1]}'"
+                    ]);
+            });
+
+            var when = DateTime.Parse(cmd.Dto.Tags[1]).ToUniversalTime();
+            var createdEvent = await calendarClient.CreateEvent(cmd.Dto.Title, when);
+            return new(createdEvent.Id);
+        }
+
         var id = Guid.NewGuid();
         await db.Todos.AddAsync(new()
         {
@@ -42,6 +66,10 @@ public sealed class TodosService(TeoAppDbContext db)
     {
         ValidateArgument(detail: "Invalid argument for updating existing todo", with: exception =>
         {
+            if (cmd.Dto.Tags.Contains("calendar-event"))
+                exception.WithError(code: $"{nameof(cmd.Dto.Tags)}",
+                    values: ["Update calendar events is not not supported, use the calendar API instead"]);
+
             if (string.IsNullOrWhiteSpace(cmd.Dto.Title))
                 exception.WithError(code: $"{nameof(cmd.Dto.Title)}",
                     values: ["Title is required, cannot be empty or white spaces"]);
@@ -77,14 +105,38 @@ public sealed class TodosService(TeoAppDbContext db)
             .AsNoTracking()
             .SingleOrDefaultAsync(item => item.Id == query.Dto.Id);
 
-        if (todo is null)
+        if (todo is not null)
+            return new(todo.Title, todo.Tags.Tags, todo.Done);
+
+        var @event = await calendarClient.GetEvent(query.Dto.Id);
+        if (@event is null)
             throw new TodoNotFoundException($"Todo with ID {query.Dto.Id} not found");
 
-        return new(todo.Title, todo.Tags.Tags, todo.Done);
+        var mapped = Map(eventItem: (query.Dto.Id, @event.Name, @event.Type, @event.When), DateTime.UtcNow);
+        return new(mapped.Title, mapped.Tags, mapped.Done);
     }
 
     public async Task<GetTodos.Response> GetTodos(GetTodos.Query query)
     {
+        if (query.Tags.Contains("calendar-event") && query.Tags.Length > 1)
+            throw new AppArgumentException("Cannot mix calendar events with other to-do items");
+
+        if (query.Tags.Contains("calendar-event"))
+        {
+            var now = DateTime.UtcNow;
+
+            var events = await calendarClient.GetEvents();
+            return new(events
+                .Select(@event =>
+                {
+                    var item = Map(eventItem: (@event.Id, @event.Name, @event.Type, @event.When), now);
+                    return new GetTodos.Item(item.Id, item.Title, Done: item.Done, Tags: item.Tags
+                        .Select(tag => new GetTodos.Tag(tag, Count: null))
+                        .ToArray());
+                })
+                .ToArray());
+        }
+
         var todos = await db.Todos
             .AsNoTracking()
             .Where(todo => query.Tags.All(queryTag => todo.Tags.Tags.Contains(queryTag)))
@@ -95,6 +147,29 @@ public sealed class TodosService(TeoAppDbContext db)
                 .Select(tag => new GetTodos.Tag(tag, Count: null))
                 .ToArray()))
             .ToArray());
+    }
+
+    private static (Guid Id, string Title, string[] Tags, bool Done) Map(
+        (Guid Id, string Name, string Type, DateTime When) eventItem, DateTime now)
+    {
+        if (eventItem.When < now)
+            return (eventItem.Id, eventItem.Name,
+                Tags: ["calendar-event"], Done: true);
+
+        if (eventItem.When < now.AddHours(1))
+            return (eventItem.Id, eventItem.Name,
+                Tags: ["calendar-event", "in-an-hour"], Done: false);
+
+        if (eventItem.When < now.AddHours(24))
+            return (eventItem.Id, eventItem.Name,
+                Tags: ["calendar-event", "in-a-day"], Done: false);
+
+        if (eventItem.When < now.AddDays(7))
+            return (eventItem.Id, eventItem.Name,
+                Tags: ["calendar-event", "in-a-week"], Done: false);
+
+        return (eventItem.Id, eventItem.Name,
+            Tags: ["calendar-event", "someday"], Done: false);
     }
 
     private static void ValidateArgument(string detail, Action<AppArgumentException> with)

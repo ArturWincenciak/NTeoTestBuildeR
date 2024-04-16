@@ -1,0 +1,23 @@
+@api = http://localhost:5135
+
+### Create a new event
+POST {{api}}/calendar/events
+Content-Type: application/json
+
+{
+  "name": "150 KGD .NET Meetup",
+  "type": "KGD .NET",
+  "when": "2024-05-20T18:00:00.0Z"
+}
+
+### Id
+@id = 963f47cb-4ef5-4ab4-bb41-083e94f6a914
+
+### Get event by id
+GET {{api}}/calendar/events/{{id}}
+Content-Type: application/json
+
+
+### Get event by id
+GET {{api}}/calendar/events?type=KGD .NET
+Content-Type: application/json

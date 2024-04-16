@@ -2,6 +2,7 @@ using System.Net;
 using System.Text.Json;
 using NTeoTestBuildeR.Modules.Todos.Core.Services;
 using TeoTests.Modules.TodosModule.Builder;
+using WireMock.Matchers;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using static System.DateTime;
@@ -19,8 +20,6 @@ public class TodosWithCalendarTestsV1
             .GetTodos(description: "Retrieve items from the calendar", tags: ["calendar-event"])
             .Build();
 
-        // App.Wiremock.Inspect();
-
         // assert
         await Verify(actual);
     }
@@ -34,7 +33,43 @@ public class TodosWithCalendarTestsV1
             .GetTodos(description: "Retrieve items from the calendar", tags: ["calendar-event"])
             .Build();
 
-        // App.Wiremock.Inspect();
+        // assert
+        await Verify(actual);
+    }
+
+    [Fact]
+    public async Task CreateCalendarTodo()
+    {
+        // arrange
+        var eventName = "Daily stand up";
+        var calendarType = "todo-list";
+        var when = UtcNow.AddHours(24);
+
+        // act
+        var actual = await new TodosTestBuilder()
+            .WithWiremock(AddCalendarEventWithCreatedStatus(eventName, calendarType, when))
+            .CreateTodo(description: "Create a to-do item in the calendar",
+                eventName, tags: ["calendar-event", $"{when:O}"])
+            .Build();
+
+        // assert
+        await Verify(actual);
+    }
+
+    [Fact]
+    public async Task CreateCalendarTodoWentWrong()
+    {
+        // arrange
+        var eventName = "Conf-call with some company pets";
+        var calendarType = "todo-list";
+        var when = UtcNow.AddHours(1);
+
+        // act
+        var actual = await new TodosTestBuilder()
+            .WithWiremock(AddCalendarEventReturnsEmptyId(eventName, calendarType, when))
+            .CreateTodo(description: "Create a to-do item in the calendar that went wrong due to empty id",
+                eventName, tags: ["calendar-event", $"{when:O}"])
+            .Build();
 
         // assert
         await Verify(actual);
@@ -71,5 +106,39 @@ public class TodosWithCalendarTestsV1
             server.response
                 .WithBody(JsonSerializer.Serialize(Array.Empty<CalendarClient.EventItemResponse>()))
                 .WithStatusCode(HttpStatusCode.OK);
+        };
+
+    private static Action<(IRequestBuilder request, IResponseBuilder response)> AddCalendarEventWithCreatedStatus(
+        string eventName, string calendarType, DateTime when) =>
+        server =>
+        {
+            server.request
+                .WithPath("/calendar/events")
+                .UsingPost()
+                .WithBody(new ExactMatcher(
+                    ignoreCase: true, JsonSerializer.Serialize(
+                        new CalendarClient.EventRequest(eventName, calendarType, when))));
+
+            server.response
+                .WithBody(JsonSerializer.Serialize(
+                    new CalendarClient.EventItemResponse(Id: Guid.NewGuid(), eventName, calendarType, when)))
+                .WithStatusCode(HttpStatusCode.Created);
+        };
+
+    private static Action<(IRequestBuilder request, IResponseBuilder response)> AddCalendarEventReturnsEmptyId(
+        string eventName, string calendarType, DateTime when) =>
+        server =>
+        {
+            server.request
+                .WithPath("/calendar/events")
+                .UsingPost()
+                .WithBody(new ExactMatcher(
+                    ignoreCase: true, JsonSerializer.Serialize(
+                        new CalendarClient.EventRequest(eventName, calendarType, when))));
+
+            server.response
+                .WithBody(JsonSerializer.Serialize(
+                    new CalendarClient.EventItemResponse(Guid.Empty, eventName, calendarType, when)))
+                .WithStatusCode(HttpStatusCode.Created);
         };
 }

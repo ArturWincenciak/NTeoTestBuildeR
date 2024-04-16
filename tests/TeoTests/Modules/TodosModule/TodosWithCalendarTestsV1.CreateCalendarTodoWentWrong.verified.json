@@ -1,0 +1,34 @@
+﻿[
+  {
+    "Description": "Create a to-do item in the calendar that went wrong due to empty id",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/todos",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      },
+      "Payload": {
+        "Title": "Conf-call with some company pets",
+        "Tags": [
+          "calendar-event",
+          "DateTimeOffset_1"
+        ]
+      }
+    },
+    "Response": {
+      "StatusCode": "InternalServerError",
+      "Payload": {
+        "type": "https://github.com/ArturWincenciak/teo-test-builder/doc/problem-details/create-calendar-event.md",
+        "status": 500,
+        "title": "Infrastructure error",
+        "detail": "Failed to create calendar event",
+        "instance": "",
+        "extensions": {
+          "traceId": "{Scrubbed}"
+        }
+      }
+    }
+  }
+]

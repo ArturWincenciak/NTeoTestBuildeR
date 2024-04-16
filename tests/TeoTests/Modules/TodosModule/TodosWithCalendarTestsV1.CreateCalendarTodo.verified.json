@@ -1,0 +1,32 @@
+﻿[
+  {
+    "Description": "Create a to-do item in the calendar",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/todos",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      },
+      "Payload": {
+        "Title": "Daily stand up",
+        "Tags": [
+          "calendar-event",
+          "DateTimeOffset_1"
+        ]
+      }
+    },
+    "Response": {
+      "StatusCode": "Created",
+      "Headers": {
+        "Location": [
+          "/Todos/Guid_1"
+        ]
+      },
+      "Payload": {
+        "Id": "Guid_1"
+      }
+    }
+  }
+]

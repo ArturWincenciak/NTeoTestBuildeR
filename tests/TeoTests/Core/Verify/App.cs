@@ -7,7 +7,7 @@ public sealed class App
 {
     private readonly static Lazy<App> LazyInstance = new(() =>
     {
-        var appFactory = new AppFactory();
+        var appFactory = new AppFactory(() => HttpClient);
         var appBuilder = appFactory
             .WithWebHostBuilder(builder => builder
                 .UseContentRoot(Directory.GetCurrentDirectory()));

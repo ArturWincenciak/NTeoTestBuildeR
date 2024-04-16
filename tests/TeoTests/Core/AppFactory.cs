@@ -1,14 +1,16 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NTeoTestBuildeR;
+using NTeoTestBuildeR.Modules.Todos.Core.Services;
 using Testcontainers.PostgreSql;
 using WireMock.Server;
 using WireMock.Settings;
 
 namespace TeoTests.Core;
 
-public sealed class AppFactory : WebApplicationFactory<Program>
+public sealed class AppFactory(Func<HttpClient> createHimselfClient) : WebApplicationFactory<Program>
 {
     private readonly PostgreSqlContainer _postgresContainer = BuildPostgres();
 
@@ -28,8 +30,13 @@ public sealed class AppFactory : WebApplicationFactory<Program>
             .Build();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder) => builder
+        .ConfigureServices(services => OverrideStatsClient(services, createHimselfClient))
         .ConfigureAppConfiguration(ConfigureTestcontainers)
         .ConfigureAppConfiguration(ConfigureWiremock);
+
+    private static void OverrideStatsClient(IServiceCollection services, Func<HttpClient> create) =>
+        services.AddTransient<StatsClient>(_ =>
+            new(create()));
 
     private void ConfigureTestcontainers(IConfigurationBuilder configurationBuilder)
     {

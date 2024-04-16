@@ -28,7 +28,7 @@ builder.Services
         serviceProvider.GetRequiredService<IConfiguration>()
             .GetSection("StatsModule:BaseAddress")
             .Get<string>() ??
-        throw new StatsClientUriException()));;
+        throw new StatsClientUriException()));
 
 var application = builder.Build();
 application

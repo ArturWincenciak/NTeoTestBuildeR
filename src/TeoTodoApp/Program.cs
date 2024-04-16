@@ -22,7 +22,8 @@ builder.Services
         serviceProvider.GetRequiredService<IConfiguration>()
             .GetSection("ExtCalendar:BaseAddress")
             .Get<string>() ??
-        throw new CalendarClientUriException()));
+        throw new CalendarClientUriException()))
+    .Services.AddMemoryCache();
 
 var application = builder.Build();
 application

@@ -1,0 +1,48 @@
+﻿[
+  {
+    "Description": "Retrieve a single to-do item from the calendar",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/todos/Guid_1",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "title": "Sort out life",
+        "tags": [
+          "calendar-event",
+          "someday"
+        ],
+        "done": false
+      }
+    }
+  },
+  {
+    "Description": "Second attempt to retrieve the same to-do item",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/todos/Guid_1",
+      "Headers": {
+        "traceparent": "{Scrubbed}"
+      }
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "title": "Sort out life",
+        "tags": [
+          "calendar-event",
+          "someday"
+        ],
+        "done": false
+      }
+    }
+  }
+]

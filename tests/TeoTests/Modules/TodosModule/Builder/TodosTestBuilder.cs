@@ -41,6 +41,17 @@ internal sealed class TodosTestBuilder : TestBuilder<TodosTestBuilder>
         return this;
     }
 
+    internal TodosTestBuilder GetTodo(string description, Guid? id)
+    {
+        With(async () =>
+        {
+            var httpRequest = new HttpRequestMessage(HttpMethod.Get, requestUri: $"/todos/{id}");
+            var httpResponse = await SendAsync(httpRequest);
+            return await httpResponse.Deserialize(description, httpRequest);
+        });
+        return this;
+    }
+
     internal TodosTestBuilder DoneTodo(string description, string whichTitle)
     {
         With(async () =>

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using NTeoTestBuildeR.Infra.ErrorHandling.Exceptions;
 using NTeoTestBuildeR.Modules.Todos.Api;
 using NTeoTestBuildeR.Modules.Todos.Core.DAL;
@@ -8,7 +9,8 @@ namespace NTeoTestBuildeR.Modules.Todos.Core.Services;
 
 public sealed class TodosService(
     TeoAppDbContext db,
-    CalendarClient calendarClient)
+    CalendarClient calendarClient,
+    IMemoryCache cache)
 {
     public async Task<CreateTodo.Response> Create(CreateTodo cmd)
     {
@@ -108,12 +110,17 @@ public sealed class TodosService(
         if (todo is not null)
             return new(todo.Title, todo.Tags.Tags, todo.Done);
 
+        var cachedEvent = cache.Get<GetTodo.Response>(query.Dto.Id);
+        if (cachedEvent is not null)
+            return cachedEvent;
+
         var @event = await calendarClient.GetEvent(query.Dto.Id);
         if (@event is null)
             throw new TodoNotFoundException($"Todo with ID {query.Dto.Id} not found");
 
         var mapped = Map(eventItem: (query.Dto.Id, @event.Name, @event.Type, @event.When), DateTime.UtcNow);
-        return new(mapped.Title, mapped.Tags, mapped.Done);
+        var result = new GetTodo.Response(mapped.Title, mapped.Tags, mapped.Done);
+        return cache.Set(query.Dto.Id, result);
     }
 
     public async Task<GetTodos.Response> GetTodos(GetTodos.Query query)

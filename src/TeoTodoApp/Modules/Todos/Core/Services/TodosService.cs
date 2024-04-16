@@ -79,7 +79,7 @@ public sealed class TodosService(TeoAppDbContext db)
 
         if (todo is null)
             throw new TodoNotFoundException($"Todo with ID {query.Dto.Id} not found");
-        
+
         return new(todo.Title, todo.Tags.Tags, todo.Done);
     }
 

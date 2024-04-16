@@ -1,0 +1,312 @@
+﻿[
+  {
+    "Description": "Set up a math and theoretical",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/todos",
+      "Payload": {
+        "Title": "Prove Riemann's hypothesis",
+        "Tags": [
+          "match-Guid_1",
+          "theoretical-Guid_1"
+        ]
+      }
+    },
+    "Response": {
+      "StatusCode": "Created",
+      "Headers": {
+        "Location": [
+          "/Todos/Guid_2"
+        ]
+      },
+      "Payload": {
+        "Id": "Guid_2"
+      }
+    }
+  },
+  {
+    "Description": "Set up a physics and theoretical",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/todos",
+      "Payload": {
+        "Title": "Define theory of everything",
+        "Tags": [
+          "physics-Guid_1",
+          "theoretical-Guid_1"
+        ]
+      }
+    },
+    "Response": {
+      "StatusCode": "Created",
+      "Headers": {
+        "Location": [
+          "/Todos/Guid_3"
+        ]
+      },
+      "Payload": {
+        "Id": "Guid_3"
+      }
+    }
+  },
+  {
+    "Description": "Set up a physics and experimental",
+    "Request": {
+      "Method": {
+        "Method": "POST"
+      },
+      "Path": "http://localhost/todos",
+      "Payload": {
+        "Title": "Conduct a measurement of the gravitational wave",
+        "Tags": [
+          "physics-Guid_1",
+          "experimental-Guid_1"
+        ]
+      }
+    },
+    "Response": {
+      "StatusCode": "Created",
+      "Headers": {
+        "Location": [
+          "/Todos/Guid_4"
+        ]
+      },
+      "Payload": {
+        "Id": "Guid_4"
+      }
+    }
+  },
+  {
+    "Description": "Should only retrieve one item with math",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/todos?tags=match-Guid_1"
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "Todos": [
+          {
+            "Id": "Guid_2",
+            "Title": "Prove Riemann's hypothesis",
+            "Tags": [
+              {
+                "Name": "match-Guid_1"
+              },
+              {
+                "Name": "theoretical-Guid_1"
+              }
+            ],
+            "Done": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Should retrieve two items with physics",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/todos?tags=physics-Guid_1"
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "Todos": [
+          {
+            "Id": "Guid_3",
+            "Title": "Define theory of everything",
+            "Tags": [
+              {
+                "Name": "physics-Guid_1"
+              },
+              {
+                "Name": "theoretical-Guid_1"
+              }
+            ],
+            "Done": false
+          },
+          {
+            "Id": "Guid_4",
+            "Title": "Conduct a measurement of the gravitational wave",
+            "Tags": [
+              {
+                "Name": "physics-Guid_1"
+              },
+              {
+                "Name": "experimental-Guid_1"
+              }
+            ],
+            "Done": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Should retrieve two items with theoretical",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/todos?tags=theoretical-Guid_1"
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "Todos": [
+          {
+            "Id": "Guid_2",
+            "Title": "Prove Riemann's hypothesis",
+            "Tags": [
+              {
+                "Name": "match-Guid_1"
+              },
+              {
+                "Name": "theoretical-Guid_1"
+              }
+            ],
+            "Done": false
+          },
+          {
+            "Id": "Guid_3",
+            "Title": "Define theory of everything",
+            "Tags": [
+              {
+                "Name": "physics-Guid_1"
+              },
+              {
+                "Name": "theoretical-Guid_1"
+              }
+            ],
+            "Done": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Should retrieve one item with experimental",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/todos?tags=experimental-Guid_1"
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "Todos": [
+          {
+            "Id": "Guid_4",
+            "Title": "Conduct a measurement of the gravitational wave",
+            "Tags": [
+              {
+                "Name": "physics-Guid_1"
+              },
+              {
+                "Name": "experimental-Guid_1"
+              }
+            ],
+            "Done": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Should retrieve one item with both math and theoretical",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/todos?tags=match-Guid_1&tags=theoretical-Guid_1"
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "Todos": [
+          {
+            "Id": "Guid_2",
+            "Title": "Prove Riemann's hypothesis",
+            "Tags": [
+              {
+                "Name": "match-Guid_1"
+              },
+              {
+                "Name": "theoretical-Guid_1"
+              }
+            ],
+            "Done": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Should retrieve one item with both physics and theoretical",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/todos?tags=physics-Guid_1&tags=theoretical-Guid_1"
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "Todos": [
+          {
+            "Id": "Guid_3",
+            "Title": "Define theory of everything",
+            "Tags": [
+              {
+                "Name": "physics-Guid_1"
+              },
+              {
+                "Name": "theoretical-Guid_1"
+              }
+            ],
+            "Done": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "Description": "Should retrieve one item with both physics and experimental",
+    "Request": {
+      "Method": {
+        "Method": "GET"
+      },
+      "Path": "http://localhost/todos?tags=physics-Guid_1&tags=experimental-Guid_1"
+    },
+    "Response": {
+      "StatusCode": "OK",
+      "Payload": {
+        "Todos": [
+          {
+            "Id": "Guid_4",
+            "Title": "Conduct a measurement of the gravitational wave",
+            "Tags": [
+              {
+                "Name": "physics-Guid_1"
+              },
+              {
+                "Name": "experimental-Guid_1"
+              }
+            ],
+            "Done": false
+          }
+        ]
+      }
+    }
+  }
+]

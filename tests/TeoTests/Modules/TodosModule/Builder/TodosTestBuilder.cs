@@ -1,6 +1,8 @@
 using System.Net.Http.Json;
+using Microsoft.AspNetCore.Http.Extensions;
 using NTeoTestBuildeR.Modules.Todos.Api;
 using TeoTests.Core;
+using TeoTests.Core.Verify;
 
 namespace TeoTests.Modules.TodosModule.Builder;
 
@@ -86,6 +88,21 @@ internal sealed class TodosTestBuilder : TestBuilder
             return await httpResponse.DeserializeWith(success: () =>
                     _state.Upsert(id: testCase.Id!, title: testCase.Title!, tags: newTags!, testCase.Done!.Value),
                 description, httpRequest, requestPayload);
+        });
+        return this;
+    }
+
+    internal TodosTestBuilder GetTodos(string description, string?[]? tags)
+    {
+        With(async httpClient =>
+        {
+            var query = new QueryBuilder {{"tags", tags!}};
+            var httpRequest = new HttpRequestMessage(HttpMethod.Get, requestUri: $"/todos{query.ToQueryString()}");
+            var httpResponse = await httpClient.SendAsync(httpRequest);
+
+            return await httpResponse.DeserializeWith<GetTodos.Response>(
+                success: responsePayload => Actual.Create(description, httpRequest, httpResponse,
+                    requestPayload: null, responsePayload), description, httpRequest);
         });
         return this;
     }

@@ -110,4 +110,45 @@ public class TodosHappyPathTests
         // assert
         await Verify(target: actual);
     }
+
+    [Fact]
+    public async Task GetTodosByTagsInQueryString()
+    {
+        // arrange
+        var @case = "A658D7F2-5298-4145-A22F-404F71B10570";
+        var match = $"match-{@case}";
+        var physics = $"physics-{@case}";
+        var theory = $"theoretical-{@case}";
+        var exp = $"experimental-{@case}";
+
+        // act
+        var actual = await new TodosTestBuilder()
+            .CreateTodo(
+                description: "Set up a math and theoretical",
+                title: "Prove Riemann's hypothesis", tags: [match, theory])
+            .CreateTodo(
+                description: "Set up a physics and theoretical",
+                title: "Define theory of everything", tags: [physics, theory])
+            .CreateTodo(
+                description: "Set up a physics and experimental",
+                title: "Conduct a measurement of the gravitational wave", tags: [physics, exp])
+            .GetTodos(
+                description: "Should only retrieve one item with math", tags: [match])
+            .GetTodos(
+                description: "Should retrieve two items with physics", tags: [physics])
+            .GetTodos(
+                description: "Should retrieve two items with theoretical", tags: [theory])
+            .GetTodos(
+                description: "Should retrieve one item with experimental", tags: [exp])
+            .GetTodos(
+                description: "Should retrieve one item with both math and theoretical", tags: [match, theory])
+            .GetTodos(
+                description: "Should retrieve one item with both physics and theoretical", tags: [physics, theory])
+            .GetTodos(
+                description: "Should retrieve one item with both physics and experimental", tags: [physics, exp])
+            .Build();
+
+        // assert
+        await Verify(target: actual);
+    }
 }

@@ -3,12 +3,21 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using NTeoTestBuildeR;
 using Testcontainers.PostgreSql;
+using WireMock.Server;
+using WireMock.Settings;
 
 namespace TeoTests.Core;
 
 public sealed class AppFactory : WebApplicationFactory<Program>
 {
     private readonly PostgreSqlContainer _postgresContainer = BuildPostgres();
+
+    public WireMockServer Wiremock { get; } = WireMockServer.Start(
+        new WireMockServerSettings
+        {
+            StartAdminInterface = true,
+            HandleRequestsSynchronously = true
+        });
 
     private static PostgreSqlContainer BuildPostgres() =>
         new PostgreSqlBuilder()
@@ -19,7 +28,8 @@ public sealed class AppFactory : WebApplicationFactory<Program>
             .Build();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder) => builder
-        .ConfigureAppConfiguration(ConfigureTestcontainers);
+        .ConfigureAppConfiguration(ConfigureTestcontainers)
+        .ConfigureAppConfiguration(ConfigureWiremock);
 
     private void ConfigureTestcontainers(IConfigurationBuilder configurationBuilder)
     {
@@ -29,6 +39,14 @@ public sealed class AppFactory : WebApplicationFactory<Program>
         configurationBuilder.AddInMemoryCollection(new KeyValuePair<string, string?>[]
         {
             new(key: "ConnectionStrings:TeoTodoApp", connectionString)
+        });
+    }
+
+    private void ConfigureWiremock(IConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.AddInMemoryCollection(new KeyValuePair<string, string?>[]
+        {
+            new(key: "ExtCalendar:BaseAddress", value: Wiremock.Urls[0])
         });
     }
 }

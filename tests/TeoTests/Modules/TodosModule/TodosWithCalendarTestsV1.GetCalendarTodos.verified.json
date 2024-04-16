@@ -8,16 +8,72 @@
       "Path": "http://localhost/todos?tags=calendar-event"
     },
     "Response": {
-      "StatusCode": "InternalServerError",
+      "StatusCode": "OK",
       "Payload": {
-        "type": "https://github.com/ArturWincenciak/teo-test-builder/doc/problem-details/internal-server-error.md",
-        "status": 500,
-        "title": "Internal server error",
-        "detail": "Unexpected error occurred",
-        "instance": "",
-        "extensions": {
-          "traceId": "{Scrubbed}"
-        }
+        "Todos": [
+          {
+            "Id": "Guid_1",
+            "Title": "Daily stand up",
+            "Tags": [
+              {
+                "Name": "calendar-event"
+              }
+            ],
+            "Done": true
+          },
+          {
+            "Id": "Guid_2",
+            "Title": "Finish app",
+            "Tags": [
+              {
+                "Name": "calendar-event"
+              },
+              {
+                "Name": "someday"
+              }
+            ],
+            "Done": false
+          },
+          {
+            "Id": "Guid_3",
+            "Title": "Lunch",
+            "Tags": [
+              {
+                "Name": "calendar-event"
+              },
+              {
+                "Name": "in-an-hour"
+              }
+            ],
+            "Done": false
+          },
+          {
+            "Id": "Guid_4",
+            "Title": "Meeting",
+            "Tags": [
+              {
+                "Name": "calendar-event"
+              },
+              {
+                "Name": "in-a-day"
+              }
+            ],
+            "Done": false
+          },
+          {
+            "Id": "Guid_5",
+            "Title": "Sprint review",
+            "Tags": [
+              {
+                "Name": "calendar-event"
+              },
+              {
+                "Name": "in-a-week"
+              }
+            ],
+            "Done": false
+          }
+        ]
       }
     }
   }

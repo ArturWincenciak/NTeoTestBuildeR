@@ -6,7 +6,7 @@ using TeoTests.Core.Verify;
 
 namespace TeoTests.Modules.TodosModule.Builder;
 
-internal sealed class TodosTestBuilder : TestBuilder
+internal sealed class TodosTestBuilder : TestBuilder<TodosTestBuilder>
 {
     private readonly TodosTestState _state = new();
 

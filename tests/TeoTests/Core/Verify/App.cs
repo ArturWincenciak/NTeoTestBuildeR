@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using WireMock.Server;
 
 namespace TeoTests.Core.Verify;
 
@@ -12,12 +13,17 @@ public sealed class App
                 .UseContentRoot(Directory.GetCurrentDirectory()));
 
         var httpClient = appBuilder.CreateClient();
-        return new(httpClient);
+        return new(httpClient, appFactory);
     });
 
+    private volatile AppFactory _appFactory;
     private volatile HttpClient _httpClient;
     public static HttpClient HttpClient => LazyInstance.Value._httpClient;
+    public static WireMockServer Wiremock => LazyInstance.Value._appFactory.Wiremock;
 
-    private App(HttpClient httpClient) =>
+    private App(HttpClient httpClient, AppFactory appFactory)
+    {
         _httpClient = httpClient;
+        _appFactory = appFactory;
+    }
 }

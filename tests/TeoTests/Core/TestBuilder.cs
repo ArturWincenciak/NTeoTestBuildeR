@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using TeoTests.Core.Verify;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using Request = WireMock.RequestBuilders.Request;

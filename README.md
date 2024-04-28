@@ -62,20 +62,74 @@ We're adding validation and including validation tests (naive implementation wit
 ---
 Switching to a real database and adapting Testcontainers (EF, Postgres, Docker).
 
-> git checkout 65408b12b459ca01a26bcd770b41dcdefcb1e51e Setting up real DB (EF, Postgres, Docker)
+> $ git checkout 65408b12b459ca01a26bcd770b41dcdefcb1e51e Setting up real DB (EF, Postgres, Docker)
 
-> git checkout 071132dd4f9726df076993db1d54c8b901d6cff7 Testcontainer with DB for testing
+> $ git checkout 071132dd4f9726df076993db1d54c8b901d6cff7 Testcontainer with DB for testing
 
 ---
 Singleton for the test application builder factory so that the application starts up exactly once for all tests.
 
-> git checkout f2b0fed9b7459aaae91de92a408c353094b55af1 Single instance of app for all tests (singleton)
+> $ git checkout f2b0fed9b7459aaae91de92a408c353094b55af1 Single instance of app for all tests (singleton)
 
 ---
 Sort and manipulate results to always get the same result in the snapshot Verify for assertions.
 
-> 008fb2a9d37bcf15b464659953745fcc65eb9d55 Test for getting to-do's by tags in query string (without sorting)
+> $ git checkout 008fb2a9d37bcf15b464659953745fcc65eb9d55 Test for getting to-do's by tags in query string (without sorting)
 
-> f80dc9045791eff0ca64d053934cb2ec5925744c Sort/manipulate the actual result before passing it to Verify
+> $ git checkout f80dc9045791eff0ca64d053934cb2ec5925744c Sort/manipulate the actual result before passing it to Verify
 
 ---
+Presentation of the second external Calendar application with which we will integrate and which we will mock using Wiremock.
+
+> $ git checkout d417ccfab69944738674b1d4b45d804fcda82c0b 3rd-party Calendar app
+
+---
+Integration with Calendar without Wiremock (no new tests, old tests are passing). Here, all tests that were not testing new functionality, so everything is still green.
+
+> $ git checkout bcd6c15b025e546413b93f29d22f226a56bf05cb Integration with 3rd-party Calendar app
+
+---
+Setting up Wiremock with the first test, here you can also see Wiremock Inspection in action.
+
+> $ git checkout 7a353d5050a5f7748e81fc987f79fbeca0836b24 Test for retrieving items from the calendar (without Wiremock)
+
+> $ git checkout 7c943158e7480e68ff148a9593e127a5f9b2a3e3 Setup Wiremock and run first test with mock of HTTP
+
+---
+I'm adding OpenTelemetry for Wiremock to differentiate which mock belongs to which test scenario. The whole solution works in the background. The programmer writing the tests doesn't need to know that OpenTelemetry exists.
+
+> $ git checkout af4581aa3570ef36d444a2a3172d581acb217e6f Second test with second mock leading to ambiguity in matching in Wiremock
+
+> $ git checkout 5e76d47670f769fc7a499a06737b4438d22b9c7d Add OpenTelemetry for clear identification of mocks in Wiremock
+
+---
+Counting the invocations of Wiremock mocks to avoid leaving unused mocks that confuse the understanding of what the test does. We don't want to have mocks that are not involved in the test. We want the test to self-check that it uses all mocks.
+
+> $ git checkout a0d0e15108615a532b3c7557f6725f9d53f7073b More tests with external calendar
+
+> $ git checkout d5cb22203bb52d9ea6738427660843c80041fa19 Test self-verifies if a given Wiremock was used the expected number of times
+
+---
+We're adding a cache to the application. Normally, we would have to provide a mock for the cache. However, in this solution, we use the cache without mocking it, just as it is in a real production application.
+
+> $ git checkout 3537363af8b47bc107311c94687914621eb9104e Cache feature and its handling, including tests
+
+---
+We're adding a new Stats module - presenting its functionality. This application will serve as a simulation of the second module of our application, and then we'll want to test it in our tests.
+
+> $ git checkout 45be71072df8ac75a211de90b23cafe0db5bce85 Stats module
+
+---
+We're adding a second Test Builder for the newly created second Stats Module.
+
+> $ git checkout 2c725f7f1a60e6f84ec277bb19d3453305ef39db Tests for Stats module
+
+---
+Integration with the Stats module. Here the tests will fail because our application calls itself via an HTTP API. These are two separate modules, but in a monolithic solution, so it's a single deployment artefact, meaning that communication involves calling our own API. However, a difficulty arises here because our HTTP API is virtual and a simulation in the server's memory, so it doesn't have a reachable address that we could access. Therefore, we need to use a trick that will be presented in the next step.
+
+> 52d62f7802a07538cd31226a2029a8557a949d25 Integration with Stats module
+
+---
+Provide a solution for calling itself without mocks in Wiremock. This addresses the problem outlined in the previous commit. Thanks to such a lazy function, we can get access to a virtual HTTP client that we can use inside the application (i.e. outside the tests - which is the opposite of what we've been doing, as we've been using the HTTP client outside the application inside the tests).
+
+> $ git checkout 2f27e38b5b8c39d1aa8d5c9d5e68ea6fb8f810c3 Register virtual HTTP client to self

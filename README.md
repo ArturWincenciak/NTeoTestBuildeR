@@ -6,7 +6,7 @@ _Stay tuned for the link to the recording of this presentation on our YouTube ch
 
 The main goal of this repository is to present a test builder that makes it easy to write application tests. The strength of this repository lies in the test project, where a convenient test builder has been meticulously crafted. This builder seamlessly integrates technologies such as ASP.NET Core, Verify, Wiremock, Testcontainer and Test Builder, which together provide significant power and accelerate the writing of tests in a proper manner.
 
-> The To-Do List application provided here is a simple implementation, deliberately kept simple to facilitate understanding of the test engine we use. Its purpose is to facilitate the demonstration of our testing capabilities, rather than being the main focus of this repository. The main strength of this repository lies in its test project, where a powerful and convenient test builder has been carefully crafted, integrating technologies such as ASP.NET Core, Verify, Wiremock, Testcontainer and Test Builder to speed up the writing of tests.
+> The To-Do List application provided here is a simple implementation, deliberately kept simple to facilitate understanding of the test engine we use. Its purpose is to facilitate the demonstration of our testing capabilities, rather than being the main focus of this repository.
 
 # 🔊 ASP .NET Core + Verify + Wiremock + Testcontainer + Test Builder
 

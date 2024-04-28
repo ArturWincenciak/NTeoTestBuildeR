@@ -1,6 +1,6 @@
 # NTeoTestBuildeR
 
-The repository was created for the talk I gave at the Krakow .NET Developers Group. The meeting took place on 17 April 2024 at 18:00 in the HEVRE club. For more details, check out our [Meetup Event](https://www.meetup.com/pl-PL/kgd-net/events/300191480/).
+The repository was created for the talk I gave at the Krakow .NET Developers Group. The meeting took place on 17 April 2024 at 18:00 in the HEVRE club. For more details, check out our [KGD .NET Meetup Event](https://www.meetup.com/pl-PL/kgd-net/events/300191480/).
 
 _Stay tuned for the link to the recording of this presentation on our YouTube channel, coming soon._
 

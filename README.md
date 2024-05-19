@@ -2,7 +2,15 @@
 
 The repository was created for the talk I gave at the Krakow .NET Developers Group. The meeting took place on 17 April 2024 at 18:00 in the HEVRE club. For more details, check out our [KGD .NET Meetup Event](https://www.meetup.com/pl-PL/kgd-net/events/300191480/).
 
-_Stay tuned for the link to the recording of this presentation on our YouTube channel, coming soon._
+## Blog post
+
+> This [Blog Post](https://teo-vincent.blog/2024/05/19/%f0%9f%94%8a-asp-net-core-verify-wiremock-testcontainer-test-builder/) is a follow-up to the talk I gave at [KGD .NET](https://youtu.be/rAW89eaL0kQ). I have included everything I was unable to say during the talk. For those who were not able to attend live, I strongly recommend watching the recording of the talk after reading this article. This is the correct order. For those who attended the meeting, the post provides the missing introductory section, which can be crucial to fully understanding and motivating the solution presented. Please check out that blog post: [ASP .NET Core + Verify + Wiremock + Testcontainer + Test Builder](https://teo-vincent.blog/2024/05/19/%f0%9f%94%8a-asp-net-core-verify-wiremock-testcontainer-test-builder/)
+
+## YouTube - 149th Meeting of the Krakow .NET User Group
+
+> On April 17, 2024, at 6:00 PM, at the HEVRE club, I delivered my first public presentation on [ASP .NET Core + Verify + Wiremock + Testcontainers + Test Builder](https://youtu.be/rAW89eaL0kQ).
+
+# To-do list
 
 The main goal of this repository is to present a test builder that makes it easy to write application tests. The strength of this repository lies in the test project, where a convenient test builder has been meticulously crafted. This builder seamlessly integrates technologies such as ASP.NET Core, Verify, Wiremock, Testcontainer and Test Builder, which together provide significant power and accelerate the writing of tests in a proper manner.
 
